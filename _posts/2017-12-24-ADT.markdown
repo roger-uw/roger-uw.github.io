@@ -6,10 +6,6 @@ categories:
   - Haskell
 ---
 
-<div lang="latex">
-\frac{1+sin(x)}{y}
-</div>
-
 **在充分简化且不考虑 bottom（Haskell 中的 `undefined`）的情况下**，类型可以看作是值的集合，而集合包含的元素的数量，即集合的势，对应了类型可能的值的数量。下文把这个数量称作类型的大小。
 
 以下是一些基本的定义。
