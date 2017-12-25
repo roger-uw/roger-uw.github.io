@@ -1,0 +1,130 @@
+---
+layout: post
+title:  "代数数据类型（ADT）的基本定义和演算"
+date:   2017-12-24 06:14:04 +0000
+categories:
+  - Haskell
+---
+
+<script type="text/javascript" src="http://latex.codecogs.com/latexit.js"></script>
+<div lang="latex">
+\frac{1+sin(x)}{y}
+</div>
+
+**在充分简化且不考虑 bottom（Haskell 中的 `undefined`）的情况下**，类型可以看作是值的集合，而集合包含的元素的数量，即集合的势，对应了类型可能的值的数量。下文把这个数量称作类型的大小。
+
+以下是一些基本的定义。
+
+{% highlight haskell %}
+data Void
+data Unit = Unit
+data Prod a b = Pair a b
+data Sum a b = InL a | InR b
+data Exp b a = Fun (a -> b)
+{% endhighlight %}
+
+`Void` 是不含任何值的类型，大小为 **0**，在 C--H 同构中对应了假命题。
+
+`Unit` 是只含一个值的类型，大小为 **1**。可以用作仅产生副作用的表达式的返回值类型，表示返回值不携带有意义的信息。另外，C 语言中以 `void` 作为函数返回类型时，`void` 其实更接近 `Unit`。
+
+`Prod` 和 `Sum` 产生**积类型（Product Type）**与**和类型（Sum Type）**，对应了集合的笛卡尔积（Cartesian Product）和不交并（Disjoint Union，有时亦称 Tagged Union）。在实际编程，比如 Haskell 中，积类型典型的例子就是 Tuple，和类型则是 `Maybe`。说到了 `Maybe` 就往往会顺带提一下 Null Reference 这个 Million-dollar Mistake，引入 Sum Type 或者像 Java 一样提供 `Optional` 这种 `Maybe` 类似物是可行的解决方案之一。
+
+函数类型比较特别，对应的集合大小是指数形式的。首先在此处只考虑 total function 并且用外延等价来判断函数相等性，大小为 a 的参数类型 `A` 的每个可能的值，都存在且仅存在一个大小为 b 的返回类型 `B` 的值与之对应，那么类型为 `A -> B` 的函数就有 b<sup>a</sup> 个。一个有趣的现象是，`Void -> a` 这个奇怪的函数类型存在且仅存在一个值，因为任何数的零次幂都等于一。这个类型在 C--H 同构下的意义是假命题可以推出任何命题，而那个唯一的值就是著名的 `absurd` 函数。
+
+*在 [[1]](#1)，[[4]](#4) 和 [[5]](#5) 中都提到了 ADT 生成了一个半环（semiring）。*
+
+容易得出一些基本类型的定义方法，比如 `Bool`，能取 `True` 或 `False` 两个值中的任意一个，记作 `Bool = 1 + 1 = 2`。
+{% highlight haskell %}
+-- data Bool = False | True
+type Bool = Sum Unit Unit
+{% endhighlight %}
+比如 `Maybe a`，要么是 `Nothing`，要么是 `Just a`，记作 `Maybe(a) = 1 + a`。
+{% highlight haskell %}
+-- data Maybe a = Nothing | Just a
+type Maybe a = Sum Unit a
+{% endhighlight %}
+再比如一个 `Bool` 和 `Unit` 的序对，记作 `T = 2 * 1 = 2`。这个类型与 `Bool` 是同构的。
+{% highlight haskell %}
+-- data BU = BU Bool Unit
+type T = Prod Bool Unit
+{% endhighlight %}
+一个关于同构的笑话。
+数学领域有哪些经典的笑话？ - Utsutsu的回答 - 知乎
+https://www.zhihu.com/question/22212241/answer/116927916
+在[1]中对简单类型的同构的判断和具体的运算法则有详细介绍。
+如果是递归定义的ADT呢？比如List。
+data List t = Nil | Cons t (List t)
+这是经典的List定义，用前边定义的一系列ADT操作在理论上来讲也应该可以写成这样。
+type List t = Sum Unit (Prod t (List t))
+然而在[1]中提到了用Haskell的类型别名（type synonymous）写不出这样的类型，因为type必须在做type checking前就被完全展开，然而List的展开是无穷无尽的，所以[1]中用了newtype。
+newtype List a = L (Sum Unit (Prod a (List a))
+其实一定要用type写是可以的，但需要引入类型层面的不动点组合子。
+newtype Fix d = Fix (d (Fix d))
+以及对类型构造器的组合，因为类型别名虽然允许多参数，但并没有产生实际的类型构造器，所以试图通过把部分应用的类型别名传给Fix的写法会导致报错。
+newtype Comp f g x = Comp (f (g x))
+然后就可以写出类型别名。
+type ListGen t = Comp (Sum Unit) (Prod t)
+type List t = Fix (ListGen t)
+以及相关的值构造器（伪）和一个值。
+cons :: t -> List t -> List t
+cons x = Fix . Comp . InR . Pair x
+
+nil :: List t
+nil = Fix . Comp . InL $ Unit
+
+x :: List Int
+x = cons 1 $ cons 0 nil
+回到最初的定义上来。
+data List t = Nil | Cons t (List t)
+省去转换到Sum和Prod的组合的步骤，这可以记作List(a) = 1 + a * List(a)，代换一下就变成了List(a) = 1 / (1 - a)。然而之前并没有提到过ADT的减法和除法，而且似乎减法和除法也很难有实际的意义。此时我们可以做的是对List(a)进行（麦克劳林）级数展开，得到：
+List(a) = 1 + a + a^2 + a^3 + a^4 + ...
+而这可以解读成，一个包含类型为a的值的列表，可以是空列表，可以包含一个a类型值，可以包含两个a类型值，可以包含三个a类型值……boom！
+* [3] 中将这种对应关系用一个amusingly就带出来了…… *
+同样的结果也可以通过直接展开List(a)的定义得到。
+List(a) = 1 + a * List(a) = 1 + a * (1 + a * List(a)) = 1 + a * (1 + a * (1 + a * List(a))) = ...
+再来看复杂一点的类型，比如二叉树。
+data Tree a = Empty | Node a (Tree a) (Tree a)
+记作Tree(a) = 1 + a * Tree(a) * Tree(a)。把定义写成方程a * Tree(a)^2 - Tree(a) + 1 = 0，然后尝试解出Tree(a)，结果是：
+如果a = 0，Tree(a) = 1;
+如果 a != 0，
+Tree(a)_1 = -((1 - 4 * a)^(1 / 2) - 1)/(2 * a)
+Tree(a)_2 = ((1 - 4 * a)^(1 / 2) + 1)/(2 * a)
+如果a是Void，那这个类型就只剩Empty可以存在了，所以a = 0的情况很合理。
+a != 0时的情况就比较麻烦了，这个方程有两个解，先看第一个Tree(a)_1，它的麦克劳林展开是：
+Tree(a)_1 = 1 + a + 2 * a^2 + 5 * a^3 + 14 * a^4 + ...
+相比起List(a)的级数展开，这个式子里出现了一些常系数。1是空树，a是只有一个节点的树，2 * a^2说明了有两个节点的二叉树有两种不同的构型，5 * a^3说明了有三个节点的二叉树有五种不同的构型……事实上 [1, 1, 2, 5, 14…] 这个序列有个名字叫做Catalan Numbers，名称来自比利时数学家Eugène Charles Catalan，而The 18th century Chinese discovery of the Catalan numbers一文则指出最早的对Catalan Numbers的使用见于清代数学家明安图的《割圜密率捷法》。
+不同节点数的二叉树的构型，来自Analytic Combinatorics的Fig 0.3。
+
+而对于第二个解Tree(a)_2，在很多介绍ADT的材料中就被选择性无视了……[9] 在介绍Catalan Numbers的母函数（Generating Function）时也遇到了这个解。
+* 以上的内容从母函数的角度也可以进行很好的诠释。*
+[9] 中给出的解释是，由于我们已经知道Tree(0) = 1，所以把0代入Tree(a)_1和Tree(a)_2检查是否会得到1。然而对于两个解来说，a = 0都会导致分母为0的情况。Tree(a)_1是 0/0型，所以用洛必达法则可以验证。Tree(a)_2则很不幸地不满足洛必达法则的使用条件，抢救的机会都没有了……
+到目前为止的内容似乎都没有体现出很明显的实际作用。下一次会提到通过对一个ADT的代数表达式求导，可以得到该ADT的one-hole context，从而方便地在在数据结构上移动焦点并显著降低不可变数据结构的更新成本。
+
+##### [1]
+##### [4]
+##### [5]
+
+
+图片
+![Image]({{ "/assets/tree.png" | absolute_url }})
+文件
+[Image]({{ "/assets/tree.png" | absolute_url }})
+You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
+
+To add new posts, simply add a file in the `_posts` directory that follows the convention `YYYY-MM-DD-name-of-post.ext` and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.
+
+Jekyll also offers powerful support for code snippets:
+
+{% highlight ruby %}
+def print_hi(name)
+  puts "Hi, #{name}"
+end
+print_hi('Tom')
+#=> prints 'Hi, Tom' to STDOUT.
+{% endhighlight %}
+
+Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
+
+[jekyll-docs]: https://jekyllrb.com/docs/home
+[jekyll-gh]:   https://github.com/jekyll/jekyll
+[jekyll-talk]: https://talk.jekyllrb.com/
