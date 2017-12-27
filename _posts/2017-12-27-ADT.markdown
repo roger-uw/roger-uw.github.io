@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "代数数据类型（ADT）的基本定义和演算"
-date:   2017-12-24 06:14:04 +0000
+date:   2017-12-27 00:00:00 +0000
 categories:
   - blog
 tags:
@@ -9,9 +9,9 @@ tags:
   - ADT
 ---
 
-ADT 在后文中代表 Algebraic Data Type。
+ADT 在后文中代表 [Algebraic Data Type](https://en.wikipedia.org/wiki/Algebraic_data_type)。
 
-**在充分简化且不考虑 bottom（Haskell 中的 `undefined`）的情况下**，类型可以看作是值的集合，而集合包含的元素的数量，即集合的势，对应了类型可能的值的数量。下文把这个数量称作类型的大小。
+**在充分简化且不考虑 [bottom](https://wiki.haskell.org/Bottom)（Haskell 中的 `undefined`）的情况下** [[6]](#6)，类型可以看作是值的集合，而集合包含的元素的数量，即集合的势，对应了类型可能的值的数量。下文把这个数量称作类型的大小。
 
 以下是一些基本的定义。
 
@@ -23,15 +23,15 @@ data Sum a b = InL a | InR b
 data Exp b a = Fun (a -> b)
 {% endhighlight %}
 
-`Void` 是不含任何值的类型，大小为 **0**，在 C--H 同构中对应了假命题。
+`Void` [[10]](#10) 是不含任何值的类型，大小为 **0**，在 C--H 同构 [[7]](#7) [[12]](#12) 中对应了假命题 [[13]](#13)。
 
-`Unit` 是只含一个值的类型，大小为 **1**。可以用作仅产生副作用的表达式的返回值类型，表示返回值不携带有意义的信息。另外，C 语言中以 `void` 作为函数返回类型时，`void` 其实更接近 `Unit`。
+`Unit` 是只含一个值的类型，大小为 **1**。可以用作仅产生副作用的表达式的返回值类型，表示返回值不携带有意义的信息。另外，C 语言中以 `void` 作为函数返回类型时，`void` 其实更接近 `Unit` [[11]](#11)。
 
-`Prod` 和 `Sum` 产生**积类型（Product Type）**与**和类型（Sum Type）**，对应了集合的笛卡尔积（Cartesian Product）和不交并（Disjoint Union，有时亦称 Tagged Union）。在实际编程，比如 Haskell 中，积类型典型的例子就是 Tuple，和类型则是 `Maybe`。说到了 `Maybe` 就往往会顺带提一下 Null Reference 这个 Million-dollar Mistake，引入 Sum Type 或者像 Java 一样提供 `Optional` 这种 `Maybe` 类似物是可行的解决方案之一。
+`Prod` 和 `Sum` 产生**积类型（Product Type）**与**和类型（Sum Type）**，对应了集合的笛卡尔积（Cartesian Product）[[14]](#14) 和不交并（Disjoint Union，有时亦称 Tagged Union）[[15]](#15)。在实际编程，比如 Haskell 中，积类型典型的例子就是 Tuple，和类型则是 `Maybe`。说到了 `Maybe` 就往往会顺带提一下 Null Reference 这个 Billion-dollar Mistake [[17]](#17)，引入 Sum Type 或者像 Java 一样提供 `Optional` 这种 `Maybe` 类似物是可行的解决方案之一 [[16]](#16)。
 
-函数类型比较特别，对应的集合大小是指数形式的。首先在此处只考虑 total function 并且用外延等价来判断函数相等性，大小为 a 的参数类型 `A` 的每个可能的值，都存在且仅存在一个大小为 b 的返回类型 `B` 的值与之对应，那么类型为 `A -> B` 的函数就有 {$b^a$} 个。一个有趣的现象是，`Void -> a` 这个奇怪的函数类型存在且仅存在一个值，因为任何数的零次幂都等于一。这个类型在 C--H 同构下的意义是假命题可以推出任何命题，而那个唯一的值就是著名的 `absurd` 函数。
+函数类型比较特别，对应的集合大小是指数形式的。首先在此处只考虑 total function 并且用[外延等价](https://ncatlab.org/nlab/show/function+extensionality)来判断函数相等性，大小为 a 的参数类型 `A` 的每个可能的值，都存在且仅存在一个大小为 b 的返回类型 `B` 的值与之对应，那么类型为 `A -> B` 的函数就有 {$b^a$} 个 [[8]](#8)。一个有趣的现象是，`Void -> a` 这个奇怪的函数类型存在且仅存在一个值，因为任何数的零次幂都等于一。这个类型在 C--H 同构下的意义是假命题可以推出任何命题，而那个唯一的值就是著名的 `absurd` 函数 [[10]](#10) [[18]](#18)。
 
-*在 [[1]](#1)，[[4]](#4) 和 [[5]](#5) 中都提到了 ADT 生成了一个半环（semiring）。*
+*在 [[1]](#1)，[[4]](#4) 和 [[5]](#5) 中都提到了 ADT 生成了一个[半环（semiring）](https://en.wikipedia.org/wiki/Semiring)。*
 
 容易得出一些基本类型的定义方法，比如 `Bool`，能取 `True` 或 `False` 两个值中的任意一个，记作 {$\text{Bool} = 1 + 1 = 2$}。
 
@@ -47,10 +47,10 @@ type Bool = Sum Unit Unit
 type Maybe a = Sum Unit a
 {% endhighlight %}
 
-再比如一个 `Bool` 和 `Unit` 的序对，记作 {$T = 2 \times 1 = 2$}。这个类型与 `Bool` 是同构的。
+再比如一个 `Bool` 和 `Unit` 的序对，记作 {$\text{T} = 2 \times 1 = 2$}。这个类型与 `Bool` 是[同构](https://en.wikipedia.org/wiki/Isomorphism)的。
 
 {% highlight haskell %}
--- data BU = BU Bool Unit
+-- data T = T Bool Unit
 type T = Prod Bool Unit
 {% endhighlight %}
 
@@ -138,11 +138,11 @@ $$a \neq 0, \text{Tree}(a)_1 = \frac{1 - \sqrt{1 - 4 \times a}}{2 \times a}, \te
 
 $$\text{Tree}(a)_1 = 1 + a + 2 \times a^2 + 5 \times a^3 + 14 \times a^4 + \dots$$
 
-相比起 {$\text{List}(a)$} 的级数展开，这个式子里出现了一些常系数。{$1$} 是空树，{$a$} 是只有一个节点的树，{$2 \times a^2$} 说明了有两个节点的二叉树有两种不同的构型，{$5 \times a^3$} 说明了有三个节点的二叉树有五种不同的构型……事实上 {$1, 1, 2, 5, 14, \dots$} 这个序列有个名字叫做 Catalan Numbers，名称来自比利时数学家 Eugène Charles Catalan，而 The 18th century Chinese discovery of the Catalan numbers 一文则指出最早的对 Catalan Numbers 的使用见于清代数学家明安图的《割圜密率捷法》。
+相比起 {$\text{List}(a)$} 的级数展开，这个式子里出现了一些常系数。{$1$} 是空树，{$a$} 是只有一个节点的树，{$2 \times a^2$} 说明了有两个节点的二叉树有两种不同的构型，{$5 \times a^3$} 说明了有三个节点的二叉树有五种不同的构型……事实上 {$1, 1, 2, 5, 14, \dots$} 这个序列有个名字叫做 [Catalan Numbers](https://en.wikipedia.org/wiki/Catalan_number)，名称来自比利时数学家 [Eugène Charles Catalan](https://en.wikipedia.org/wiki/Eug%C3%A8ne_Charles_Catalan)，而 [The 18th century Chinese discovery of the Catalan numbers](http://www.math.ucla.edu/~pak/lectures/Cat/Larcombe-The_18th_century_Chinese_discovery_of_the_Catalan_numbers.pdf) 一文则指出最早的对 Catalan Numbers 的使用见于清代数学家明安图的《割圜密率捷法》。
 
 ![binary_tree]({{ "/assets/ADT/tree.png" | absolute_url }})
 
-*上图是在各种地方被用了很多次的不同节点数的二叉树的构型，来自 Analytic Combinatorics 的 Fig 0.3。*
+*上图是在各种地方被用了很多次的不同节点数的二叉树的构型。 [[19]](#19)*
 
 而对于第二个解 {$\text{Tree}(a)_2$}，在很多介绍 ADT 的材料中就被选择性无视了……[[9]](#9) 在介绍 Catalan Numbers 的母函数（Generating Function）时也遇到了这个解。
 
@@ -150,7 +150,7 @@ $$\text{Tree}(a)_1 = 1 + a + 2 \times a^2 + 5 \times a^3 + 14 \times a^4 + \dots
 
 [[9]](#9) 中给出的解释是，由于我们已经知道 {$\text{Tree}(0) = 1$}，所以把 {$0$} 代入 {$\text{Tree}(a)_1$} 和 {$\text{Tree}(a)_2$} 检查是否会得到 {$1$}。然而对于两个解来说，{$a = 0$} 都会导致分母为 {$0$} 的情况。{$\text{Tree}(a)_1$} 是 {$0/0$} 型，所以用洛必达法则可以验证。{$\text{Tree}(a)_2$} 则很不幸地不满足洛必达法则的使用条件，抢救的机会都没有了……
 
-到目前为止的内容似乎都没有体现出很明显的实际作用。下一次会提到通过对一个 ADT 的代数表达式求导，可以得到该 ADT 的 one-hole context，从而方便地在在数据结构上移动焦点并显著降低不可变数据结构的更新成本。
+到目前为止的内容似乎都没有体现出很明显的实际作用。下一次会提到通过对一个 ADT 的代数表达式求导，可以得到该 ADT 的 one-hole context [[3]](#3)，从而方便地在在数据结构上移动焦点并显著降低不可变数据结构的更新成本。
 
 ##### [1]
 [The Algebra of Algebraic Data Types, Part 1](http://chris-taylor.github.io/blog/2013/02/10/the-algebra-of-algebraic-data-types/)
@@ -188,3 +188,33 @@ Haskell 的指称语义。
 [The Catalan Numbers from Their Generating Function](https://mikespivey.wordpress.com/2013/03/19/the-catalan-numbers-from-their-generating-function/)
 
 对 Catalan Numbers 的介绍
+##### [10]
+[Void.hs](https://github.com/ekmett/void/blob/master/src-old/Data/Void.hs)
+
+[How is Data.Void.absurd different from ⊥?](https://stackoverflow.com/questions/38556531/how-is-data-void-absurd-different-from-%E2%8A%A5)
+
+老版的 Void 实现以及一些讨论。
+##### [11]
+Types and Programming Languages, Chapter 11, Section 3, Page 119, Line 6~13.
+##### [12]
+Types and Programming Languages, Chapter 9, Section 4.
+##### [13]
+[True and False](https://softwarefoundations.cis.upenn.edu/current/lf-current/ProofObjects.html#lab256)
+##### [14]
+Types and Programming Languages, Chapter 11, Section 6, Page 126~127.
+##### [15]
+Types and Programming Languages, Chapter 11, Section 9, Page 132~133.
+##### [16]
+Types and Programming Languages, Chapter 11, Section 10, Page 137~138.
+##### [17]
+[THE WORST MISTAKE OF COMPUTER SCIENCE](https://www.lucidchart.com/techblog/2015/08/31/the-worst-mistake-of-computer-science/)
+
+Null Reference 相关。
+##### [18]
+[Principle of explosion](https://en.wikipedia.org/wiki/Principle_of_explosion)
+
+[Principle of Explosion - XKCD](https://xkcd.com/704/)
+
+爆炸原理相关。
+##### [19]
+[Analytic Combinatorics](http://algo.inria.fr/flajolet/Publications/book.pdf), An Invitation to Analytic Combinatorics, Page 6, Fig 0.3.
