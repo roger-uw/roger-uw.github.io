@@ -1,0 +1,12 @@
+---
+layout: post
+title:  "软件基础（Agda 版）"
+date:   2017-12-27 00:00:00 +0000
+categories:
+  - post
+tags:
+  - Agda
+---
+{% highlight Agda %}
+open import Relation.Binary.PropositionalEquality using (_≡_; refl)
+{% endhighlight %}
