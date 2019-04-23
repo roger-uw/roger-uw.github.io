@@ -43,14 +43,10 @@ _`Control.Monad.Fail` 在 GHC 8.0 引入用于淘汰 `Monad` 类型类的 `fail`
 
 UoE 的课件中引用了一个押韵的定义：
 
->_A parser for things_
-
->_Is a function from strings_
-
->_To lists of pairs_
-
->_Of things and strings_
-
+>_A parser for things_  
+>_Is a function from strings_  
+>_To lists of pairs_  
+>_Of things and strings_  
 >      _—Graham Hutton_
 
 该定义出现于 Graham Hutton 所著的 Programming in Haskell [[1]](#1)，用 Haskell 代码表示即为：
