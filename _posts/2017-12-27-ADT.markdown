@@ -152,6 +152,9 @@ $$\text{Tree}(a)_1 = 1 + a + 2 \times a^2 + 5 \times a^3 + 14 \times a^4 + \dots
 
 到目前为止的内容似乎都没有体现出很明显的实际作用。下一次会提到通过对一个 ADT 的代数表达式求导，可以得到该 ADT 的 one-hole context [[3]](#3)，从而方便地在在数据结构上移动焦点并显著降低不可变数据结构的更新成本。
 
+
+### References
+
 ##### [1]
 [The Algebra of Algebraic Data Types, Part 1](http://chris-taylor.github.io/blog/2013/02/10/the-algebra-of-algebraic-data-types/)
 

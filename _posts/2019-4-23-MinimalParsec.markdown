@@ -1,0 +1,272 @@
+---
+layout: post
+title:  "简单的 Parsec 实现"
+date:   2019-4-23 00:00:00 +0000
+categories:
+  - post
+tags:
+  - Haskell
+  - Parsec
+---
+
+安装 [`markdown-unlit`](http://hackage.haskell.org/package/markdown-unlit) 并使用 `-pgmL markdown-unlit` 选项，可在 `ghci` 中载入并运行本文（需将后缀名改为 `.lhs`）。
+
+_这里是一堆扩展和导入_
+
+```haskell
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FunctionalDependencies #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE MultiWayIf #-}
+
+module MinimalParsec where
+
+import Data.Char
+import Data.Either
+import Data.Monoid
+import Control.Arrow
+import Control.Monad
+import Control.Applicative
+import Control.Monad.Trans
+import Control.Monad.State
+import Control.Monad.Writer
+import Control.Monad.Except
+import Control.Monad.Identity
+import qualified Control.Monad.Fail as Fail
+```
+
+_`Control.Monad.Fail` 在 GHC 8.0 引入用于淘汰 `Monad` 类型类的 `fail` 方法。以下实现若要在旧版本 GHC 使用，可能需要额外定义 `fail` 方法。_
+
+本文的 Parsec 仅作为 Parser Combinator 的缩写，并非特指 [Parsec](http://hackage.haskell.org/package/parsec) 库。常见的 Parsec 库有 [Parsec](http://hackage.haskell.org/package/parsec)，[Attoparsec](http://hackage.haskell.org/package/attoparsec)，[ReadP](http://hackage.haskell.org/package/base-4.12.0.0/docs/Text-ParserCombinators-ReadP.html)，[Megaparsec](http://hackage.haskell.org/package/megaparsec) 等等。在这些库不可用的时候，实现一个基础的 Parsec 库也是很好的 Haskell 练习。比如爱丁堡大学的 [Informatics 1 - Introduction to Computation](http://www.drps.ed.ac.uk/18-19/dpt/cxinfr08025.htm) 的 [Monads 部分](https://www.learn.ed.ac.uk/bbcswebdav/pid-3432293-dt-content-rid-7167241_1/courses/INFR080252018-9SV1SEM1/lectures/fp/lect20.pdf) 就使用了 Parser Monad 作为例子，而这也可以作为进一步实现更完善的 Parsec 库的基础。
+
+UoE 的课件中引用了一个押韵的定义：
+
+>_A parser for things_
+>_Is a function from strings_
+>_To lists of pairs_
+>_Of things and strings_
+>      _—Graham Hutton_
+
+该定义出现于 Graham Hutton 所著的 Programming in Haskell [[1]](#1)，用 Haskell 代码表示即为：
+
+```haskell
+type HuttonParsec a = String -> [(String, a)]
+```
+
+这是一个经典的定义，更详细的相关内容可以参考 UoE 的课件。然而，这也是一个简单且特化的定义：它只能处理 `String`，也就是 `[Char]` 类型的输入，而我们希望能够处理任意类型的 token 序列；它表示了一个非确定的 parser，也就是它会以列表的形式返回多个 parsing 结果，诚然这里的列表也起到了表示可能失败的 parsing 的作用，但实际中，比起非确定性，我们更关心 parsing 是否成功以及如果成功，结果是什么；最后，除了非确定性，我们可能需要管理更丰富的副作用以及副作用的组合，同时最大程度复用代码，这个定义缺乏了对应的抽象。
+
+首先是处理任意 token 序列的问题。在 [[2]](#2) 中 token 被作为类型参数 `a` 抽象出去，所以作为输入的是泛化了的 `[a]`。这里我们做进一步的抽象——形似于 [Parsec](http://hackage.haskell.org/package/parsec) 中的 `Stream` 类型类定义——对于一个 token 序列，我们只需要知道如何**连续地**从这个序列中取出 token（`s -> (t, s)`），以及是否已经取完（`s -> Maybe (t, s)`）。列表类型自然地成为了 `Stream` 类型类的实例。
+
+```haskell
+-- | Stream of tokens
+class Stream s t | s -> t where
+  uncons :: s -> Maybe (t, s)
+
+instance Stream [a] a where
+  uncons [] = Nothing
+  uncons (x : xs) = Just (x, xs)
+```
+
+再来看关于副作用管理的部分。`HuttonParsec` 的定义强烈提示了它与 `StateT` 单子变换器有关，因为它具有类似于 `s -> m (a, s)` 的形式，而单子变换器也正是之前提出的问题的一种解决办法。其实在 [[3]](#3) 中就已经指出，`HuttonParsec` 可以被如下定义所替代。
+
+```haskell
+-- @newtype StateT s m a = StateT { runStateT :: s -> m (a,s) }@
+type HuttonParsecStateT a = StateT String [] a
+```
+
+这样的好处是我们免费获得了所有为 `StateT` 定义的类型类实例——包括 `Alternative`/`MonadPlus` 这样在 Parsec 实现中非常重要的类型类（因为底层单子 `[]` 是 `MonadPlus` 的实例）。于是，在下面的代码中，我们更进一步，将 token 序列类型和底层单子都抽象出来，这时我们的定义就和 `StateT` 没什么区别了。为了与已有的 `StateT` 区分，我们用 `newtype` 做包裹，同时使用 `GeneralizedNewtypeDeriving` 扩展来免费获得各种需要的类型类实例。
+
+```haskell
+-- | Backtracking Parser
+-- @s -> m (a, s)@
+newtype BTParsecT s m a = BTParsecT (StateT s m a)
+  deriving (Functor, Applicative, Monad, MonadTrans, MonadPlus, Alternative, Fail.MonadFail, MonadState s)
+```
+
+剩下的事情便是让 `BTParsecT` 真正可用。除了常规的 `runBTParsecT` 和 `evalBTParsecT`，我们还需要补充生成针对单个 token 的 parser 的 `itemBT`，以及表示期望得到文件尾的 `eofBT`。需要注意的是，因为希望尽量精简，此处以及下文中的 Parsec 实现都没有留存位置数据，所以报错能提供的信息十分有限。
+
+```haskell
+runBTParsecT :: BTParsecT s m a -> s -> m (a, s)
+runBTParsecT (BTParsecT p) = runStateT p
+
+evalBTParsecT :: (Monad m) => BTParsecT s m a -> s -> m a
+evalBTParsecT p = fmap fst . runBTParsecT p
+
+itemBT :: (Fail.MonadFail m, Stream s t) => (t -> Maybe a) -> BTParsecT s m a
+itemBT f = do
+  s <- get
+  case uncons s of
+    Nothing -> Fail.fail "unexpected end of input"
+    Just (t, s') -> case f t of
+      Nothing -> Fail.fail "mismatched token"
+      Just a -> put s' >> return a
+
+eofBT :: (Fail.MonadFail m, Stream s t) => BTParsecT s m ()
+eofBT = do
+  s <- get
+  case uncons s of
+    Nothing -> return ()
+    _ -> Fail.fail "unexpected token"
+```
+
+下面给出一些例子。
+
+```haskell
+-- | Sample parser combinators
+charBT :: (Fail.MonadFail m, Stream s Char) => Char -> BTParsecT s m Char
+charBT c = itemBT (\t -> if t == c then Just c else Nothing)
+
+stringBT :: (Fail.MonadFail m, Stream s Char) => String -> BTParsecT s m String
+stringBT = mapM charBT
+
+digitBT :: (Fail.MonadFail m, Stream s Char) => BTParsecT s m Char
+digitBT = itemBT (\t -> if isDigit t then Just t else Nothing)
+
+letterBT :: (Fail.MonadFail m, Stream s Char) => BTParsecT s m Char
+letterBT = itemBT (\t -> if isLetter t then Just t else Nothing)
+
+spcBT :: (Fail.MonadFail m, Stream s Char) => BTParsecT s m Char
+spcBT = itemBT (\t -> if isSpace t then Just t else Nothing)
+
+sepByBT :: (Fail.MonadFail m, Stream s Char) => BTParsecT s m a -> BTParsecT s m b -> BTParsecT s m [a]
+sepByBT a b = ((:) <$> a <*> many (b *> a)) <|> pure []
+```
+
+到此为止，一切看起来都很顺利。然而，如果我们将 `sepByBT` 和 `Text.Parsec` 中的 [`sepBy`](http://hackage.haskell.org/package/parsec-3.1.13.0/docs/src/Text.Parsec.Combinator.html#sepBy) 比较，就会发现它们的表现是不同的。
+
+```
+> parse (sepBy digit (char ',')) "" "1,"
+Left (line 1, column 3):
+unexpected end of input
+expecting digit
+
+> evalBTParsecT (sepByBT digitBT (charBT ',')) "1,"
+"1"
+```
+
+导致这个区别的原因是，`Text.Parsec` 是默认 Predictive，或者说 {$LL(1)$} 的（[UoE 相关课件](https://www.inf.ed.ac.uk/teaching/courses/ct/18-19/slides/5-parsing.pdf)），在使用 `try` 等组合子时则可以获得任意的 lookahead；而 `BTParsecT` 总是 full backtracking，或者说 {$LL(\infty)$} 的 [[4]](#4)。针对此处的例子，主要的区别体现在 `sepBy` 和 `sepByBT` 的定义中都使用了的 `many`。简单来说，`many` 可以定义为 `many p = ((:) <$> p <*> many p) <|> pure []`。对于 `Text.Parsec`，在成功消耗了 `'1'` 之后，会执行 `many (char ',' >> digit)`，也就是：
+
+```
+((:) <$> (char ',' >> digit) <*> many (char ',' >> digit)) <|> pure []
+```
+
+此处，`char ',' >> digit` 成功消耗了 `','`，随后期望得到 `digit`，却发现已经到了序列尾，于是产生了错误信息。同时，由于已经消耗了一个 token（被 `char ','` 消耗的 `','`），`<|>` 右侧的 `pure []` 不再被执行。而对于 `sepByBT` 来说，`charBT ',' *> digitBT` 在消耗了 `','` 并失败之后，`<|>` 会尝试恢复到输入被消耗前的位置执行 `pure []`。由于 `pure []` 永远成功，我们便得到了上面的结果。
+
+若用 `Text.Parsec` 的行为进行类比，`BTParsecT` 相当于到处都加上了 `try`，而 `try` 是很贵的 [[5]](#5)。[[4]](#4) 也指出，full backtracking 可能会导致严重的空间泄露，同时也会让提供精准的错误信息变得困难。为了解决这些问题，[[4]](#4) 提供了一种默认 Predictive 的 Parsec 实现思路——实际上，[[4]](#4) 就是 `Text.Parsec` 的原型。上文提到过，我们并不关心详细的错误信息，所以我们参考 [[4]](#4) 中的基础实现即可。[[4]](#4) 中基础的 `Parser` 类型定义如下。
+
+```haskell
+type Parser a = String -> Consumed a
+
+data Consumed a = Consumed (Reply a) | Empty (Reply a)
+
+data Reply a = Ok a String | Error
+```
+
+注意到 `Consumed a` 同构于 `(Reply a, Bool)`，且 `Consumed a` 满足以下规则 [[4]](#4)：
+
+p | q | (p >>= q)
+--- | --- | ---
+Empty | Empty | Empty
+Empty | Consumed | Consumed
+Consumed | Empty | Consumed
+Consumed | Consumed | Consumed
+
+如果把 `Empty` 换成 `False`，`Consumed` 换成 `True`，我们会发现这个规则和 `Bool` 关于 `||` 生成的 `Any` 幺半群是一致的（当然，换一种定义方式，`All` 也可以），而这提示“记录是否消耗了输入”这个副作用可以交给 `Writer Any` 单子来管理。同时，注意到 `Reply a` 同构于 `Maybe (a, String)`，那么 `Parser a` 就同构于 `String -> (Maybe (a, String), Any)`，使用单子变换器重写便是 `StateT String (MaybeT (Writer Any)) a`。随后，将 `String` 抽象出去，用 `ExceptT String` 换掉 `MaybeT` 以提供基本的错误信息，加入底层单子，新的 Parsec 类型定义便成型了。我们同样使用 `GeneralizedNewtypeDeriving` 扩展来免费获得一些类型类的实例，但不同于 `BTParsecT`，此处若仍然自动生成 `Alternative` 等类型类的实例，我们将无法得到期望的 Predictive 特性（[为什么？](http://hackage.haskell.org/package/transformers-0.5.6.2/docs/src/Control.Monad.Trans.Except.html#ExceptT)），所以我们需要自己提供符合要求的实现。
+
+```haskell
+-- | Predictive Parser
+-- @s -> m (Either String (a, s), Any)@
+newtype PDParsecT s m a = PDParsecT (StateT s (ExceptT String (WriterT Any m)) a)
+  deriving (Functor, Applicative, Monad, MonadState s, MonadWriter Any)
+
+runPDParsecT :: PDParsecT s m a -> s -> m (Either String (a, s), Any)
+runPDParsecT (PDParsecT p) = runWriterT . runExceptT . runStateT p 
+
+evalPDParsecT :: (Monad m) => PDParsecT s m a -> s -> m (Either String a)
+evalPDParsecT p = fmap (either (Left . id) (Right . fst) . fst) . runPDParsecT p
+
+isConsumed = getAny . snd
+isFailed = isLeft . fst
+isSucc = isRight . fst
+
+instance (Monad m) => Alternative (PDParsecT s m) where
+  empty = PDParsecT empty
+  pA <|> pB = PDParsecT . StateT $ \s -> ExceptT . WriterT $ do
+    rA <- runPDParsecT pA s
+    if isConsumed rA then return rA else do
+      rB <- runPDParsecT pB s
+      return $ if | isConsumed rB -> rB
+                  | isSucc rA -> rA
+                  | otherwise -> case fst rB of {Left "" -> rA; _ -> rB}
+
+instance (Monad m) => MonadPlus (PDParsecT s m) where
+  mzero = empty
+  mplus = (<|>)
+  
+instance (Monad m) => Fail.MonadFail (PDParsecT s m) where
+  fail = PDParsecT . StateT . const . ExceptT . return . Left
+
+instance MonadTrans (PDParsecT s) where
+  lift m = PDParsecT . StateT $ \s -> ExceptT . WriterT $ do
+    a <- m
+    return (Right (a, s), mempty)
+
+itemPD :: (Monad m, Stream s t) => (t -> Maybe a) -> PDParsecT s m a
+itemPD f = do
+  s <- get
+  case uncons s of
+    Nothing -> Fail.fail "unexpected end of input"
+    Just (t, s') -> case f t of
+      Nothing -> Fail.fail "mismatched token"
+      Just a -> put s' >> tell (Any True) >> return a
+
+tryPD :: (Monad m) => PDParsecT s m a -> PDParsecT s m a
+tryPD p = PDParsecT . StateT $ \s -> ExceptT . WriterT $ do
+  r @ (e, consumed) <- runPDParsecT p s
+  return (if getAny consumed && isLeft e then (e, Any False) else r)
+
+eofPD :: (Monad m, Stream s t) => PDParsecT s m ()
+eofPD = do
+  s <- get
+  case uncons s of
+    Nothing -> return ()
+    _ -> Fail.fail "unexpected token"
+
+-- | Sample parser combinators
+charPD :: (Monad m, Stream s Char) => Char -> PDParsecT s m Char
+charPD c = itemPD (\t -> if t == c then Just c else Nothing)
+
+stringPD :: (Monad m, Stream s Char) => String -> PDParsecT s m String
+stringPD = mapM charPD
+```
+
+##### [1]
+HUTTON, G. _Programming in Haskell_, 2nd ed. Cambridge University Press, New York, NY, USA, 2016, ch. 13, pp. 177–195.
+
+[INFO](http://www.cs.nott.ac.uk/~pszgmh/pih.html)
+
+##### [2]
+HUTTON, G. Higher-order functions for parsing. _Journal of Functional Programming 2_, 3 (1992), 323–343.
+
+[PDF](http://www.cs.nott.ac.uk/~pszgmh/parsing.pdf)
+
+##### [3]
+HUTTON, G., AND MEIJER, E. Monadic parser combinators. Tech. Rep. NOTTCS-TR-96-4, Department of Computer Science, University of Nottingham, 1996.
+
+[PDF](http://www.cs.nott.ac.uk/~pszgmh/monparsing.pdf)
+
+##### [4]
+LEIJEN, D., AND MEIJER, E. Parsec: Direct style monadic parser combinators for the real world. Tech. Rep. UU-CS-2001-35, Departement of Computer Science, Universiteit Utrecht, July 2001.
+
+[PDF](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/parsec-paper-letter.pdf)
+
+##### [5]
+O’SULLIVAN, B., GOERZEN, J., AND STEWART, D. _Real World Haskell_, 1st ed. O’Reilly Media, Inc., 2008, ch. 16, p. 402.
+
+[PDF](http://pv.bstu.ru/flp/RealWorldHaskell.pdf)
+
+[HTML](http://book.realworldhaskell.org/read/using-parsec.html)
+
+[中文](http://cnhaskell.com/chp/16.html#id5)
