@@ -131,7 +131,7 @@ spcBT :: (Fail.MonadFail m, Stream s Char) => BTParsecT s m Char
 spcBT = itemBT (\t -> if isSpace t then Just t else Nothing)
 
 sepByBT :: (Fail.MonadFail m, Stream s Char) => BTParsecT s m a -> BTParsecT s m b -> BTParsecT s m [a]
-sepByBT a b = ((:) <$> a <*> many (b *> a)) <|> pure []
+sepByBT a b = liftA2 (:) a (many (b *> a)) <|> pure []
 ```
 
 到此为止，一切看起来都很顺利。然而，如果我们将 `sepByBT` 和 `Text.Parsec` 中的 [`sepBy`](http://hackage.haskell.org/package/parsec-3.1.13.0/docs/src/Text.Parsec.Combinator.html#sepBy) 比较，就会发现它们的表现是不同的。
@@ -146,13 +146,21 @@ expecting digit
 "1"
 ```
 
-导致这个区别的原因是，`Text.Parsec` 是默认 Predictive，或者说 {$LL(1)$} 的（[UoE 相关课件](https://www.inf.ed.ac.uk/teaching/courses/ct/18-19/slides/5-parsing.pdf)），在使用 `try` 等组合子时则可以获得任意的 lookahead；而 `BTParsecT` 总是 full backtracking，或者说 {$LL(\infty)$} 的 [[4]](#4)。针对此处的例子，主要的区别体现在 `sepBy` 和 `sepByBT` 的定义中都使用了的 `many`。简单来说，`many` 可以定义为 `many p = ((:) <$> p <*> many p) <|> pure []`。对于 `Text.Parsec`，在成功消耗了 `'1'` 之后，会执行 `many (char ',' >> digit)`，也就是：
+导致这个区别的原因是，`Text.Parsec` 是默认 Predictive，或者说 {$LL(1)$} 的（[UoE 相关课件](https://www.inf.ed.ac.uk/teaching/courses/ct/18-19/slides/5-parsing.pdf)），在使用 `try` 等组合子时则可以获得任意的 lookahead；而 `BTParsecT` 总是 full backtracking，或者说 {$LL(\infty)$} 的 [[4]](#4)。针对此处的例子，主要的区别体现在 `sepBy` 和 `sepByBT` 的定义中都使用了的 `many`。`sepBy` 和 `many` 的简化定义如下。其中为了与 `Text.Parsec` 的原定义一致，`sepBy` 使用了单子风格，但其实使用类似于 `sepByBT` 的 Applicative 风格也是可以的。
+
+```
+sepBy p sep = liftM2 (:) p (many (sep >> p)) <|> return []
+
+many p = ((:) <$> p <*> many p) <|> pure []
+```
+
+对于 `sepBy digit (char ',')`，在成功消耗了 `'1'` 之后，会执行 `many (char ',' >> digit)`，也就是：
 
 ```
 ((:) <$> (char ',' >> digit) <*> many (char ',' >> digit)) <|> pure []
 ```
 
-此处，`char ',' >> digit` 成功消耗了 `','`，随后期望得到 `digit`，却发现已经到了序列尾，于是产生了错误信息。同时，由于已经消耗了一个 token（被 `char ','` 消耗的 `','`），`<|>` 右侧的 `pure []` 不再被执行。而对于 `sepByBT` 来说，`charBT ',' *> digitBT` 在消耗了 `','` 并失败之后，`<|>` 会尝试恢复到输入被消耗前的位置执行 `pure []`。由于 `pure []` 永远成功，我们便得到了上面的结果。
+此处，`char ',' >> digit` 成功消耗了 `','`，随后期望得到 `digit`，却发现已经到了序列尾，于是产生了错误信息。同时，由于已经消耗了一个 token（被 `char ','` 消耗的 `','`），`<|>` 右侧的 `pure []` 不再被执行。而对于 `sepByBT` 来说，在 `charBT ',' *> digitBT` 消耗了 `','` 并失败之后，`<|>` 会**恢复**到输入被消耗前的位置尝试执行 `pure []`。由于 `pure []` 永远成功，我们便得到了上面的结果。
 
 若用 `Text.Parsec` 的行为进行类比，`BTParsecT` 相当于到处都加上了 `try`，而 `try` 是很贵的 [[5]](#5)。[[4]](#4) 也指出，full backtracking 可能会导致严重的空间泄露，同时也会让提供精准的错误信息变得困难。为了解决这些问题，[[4]](#4) 提供了一种默认 Predictive 的 Parsec 实现思路——实际上，[[4]](#4) 就是 `Text.Parsec` 的原型。上文提到过，我们并不关心详细的错误信息，所以我们参考 [[4]](#4) 中的基础实现即可。[[4]](#4) 中基础的 `Parser` 类型定义如下。
 
