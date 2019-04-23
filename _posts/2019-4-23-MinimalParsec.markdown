@@ -146,21 +146,21 @@ expecting digit
 "1"
 ```
 
-导致这个区别的原因是，`Text.Parsec` 是默认 Predictive，或者说 {$LL(1)$} 的（[UoE 相关课件](https://www.inf.ed.ac.uk/teaching/courses/ct/18-19/slides/5-parsing.pdf)），在使用 `try` 等组合子时则可以获得任意的 lookahead；而 `BTParsecT` 总是 full backtracking，或者说 {$LL(\infty)$} 的 [[4]](#4)。针对此处的例子，主要的区别体现在 `sepBy` 和 `sepByBT` 的定义中都使用了的 `many`。`sepBy` 和 `many` 的简化定义如下。其中为了与 `Text.Parsec` 的原定义一致，`sepBy` 使用了单子风格，但其实使用类似于 `sepByBT` 的 Applicative 风格也是可以的。
+导致这个区别的原因是，`Text.Parsec` 是默认 Predictive，或者说 {$LL(1)$} 的（[UoE 相关课件](https://www.inf.ed.ac.uk/teaching/courses/ct/18-19/slides/5-parsing.pdf)），在使用 `try` 等组合子时则可以获得任意的 lookahead；而 `BTParsecT` 总是 full backtracking，或者说 {$LL(\infty)$} 的 [[4]](#4)。针对此处的例子，主要的区别体现在 `sepBy` 和 `sepByBT` 都使用了的 `many` 中的 `<|>`。`sepBy` 和 `many` 的简化版定义如下。_`Text.Parsec` 中原本的 `sepBy` 使用了单子风格，此处为了与 `sepByBT` 对应而改写为 Applicative 风格。容易观察到，`sepBy` 和 `sepByBT` 的定义是一致的。_
 
 ```
-sepBy p sep = liftM2 (:) p (many (sep >> p)) <|> return []
+sepBy p sep = liftA2 (:) p (many (sep *> p)) <|> pure []
 
-many p = ((:) <$> p <*> many p) <|> pure []
+many p = liftA2 (:) p (many p) <|> pure []
 ```
 
-对于 `sepBy digit (char ',')`，在成功消耗了 `'1'` 之后，会执行 `many (char ',' >> digit)`，也就是：
+对于 `sepBy digit (char ',')`，在成功消耗了 `'1'` 之后，会执行 `many (char ',' *> digit)`，也就是：
 
 ```
-((:) <$> (char ',' >> digit) <*> many (char ',' >> digit)) <|> pure []
+liftA2 (:) (char ',' *> digit) (many (char ',' *> digit)) <|> pure []
 ```
 
-此处，`char ',' >> digit` 成功消耗了 `','`，随后期望得到 `digit`，却发现已经到了序列尾，于是产生了错误信息。同时，由于已经消耗了一个 token（被 `char ','` 消耗的 `','`），`<|>` 右侧的 `pure []` 不再被执行。而对于 `sepByBT` 来说，在 `charBT ',' *> digitBT` 消耗了 `','` 并失败之后，`<|>` 会**恢复**到输入被消耗前的位置尝试执行 `pure []`。由于 `pure []` 永远成功，我们便得到了上面的结果。
+此处，`char ',' *> digit` 成功消耗了 `','`，随后期望得到 `digit`，却发现已经到了序列尾，于是产生了错误信息。同时，由于已经消耗了一个 token（被 `char ','` 消耗的 `','`），`<|>` 右侧的 `pure []` 不再被执行。而对于 `sepByBT` 来说，在 `charBT ',' *> digitBT` 消耗了 `','` 并失败之后，`<|>` 会**恢复**到输入被消耗前的位置尝试执行 `pure []`。由于 `pure []` 永远成功，我们便得到了上面的结果。
 
 若用 `Text.Parsec` 的行为进行类比，`BTParsecT` 相当于到处都加上了 `try`，而 `try` 是很贵的 [[5]](#5)。[[4]](#4) 也指出，full backtracking 可能会导致严重的空间泄露，同时也会让提供精准的错误信息变得困难。为了解决这些问题，[[4]](#4) 提供了一种默认 Predictive 的 Parsec 实现思路——实际上，[[4]](#4) 就是 `Text.Parsec` 的原型。上文提到过，我们并不关心详细的错误信息，所以我们参考 [[4]](#4) 中的基础实现即可。[[4]](#4) 中基础的 `Parser` 类型定义如下。
 
