@@ -344,27 +344,27 @@ Identity (Right (Sub (Add (Imm 1) (Div (Mul (Var "xyz") (Imm 3)) (Imm 5))) (Add 
 
 ### References
 
-#### [1]
+##### [1]
 HUTTON, G. _Programming in Haskell_, 2nd ed. Cambridge University Press, New York, NY, USA, 2016, ch. 13, pp. 177–195.
 
 [INFO](http://www.cs.nott.ac.uk/~pszgmh/pih.html)
 
-#### [2]
+##### [2]
 HUTTON, G. Higher-order functions for parsing. _Journal of Functional Programming 2_, 3 (1992), 323–343.
 
 [PDF](http://www.cs.nott.ac.uk/~pszgmh/parsing.pdf)
 
-#### [3]
+##### [3]
 HUTTON, G., AND MEIJER, E. Monadic parser combinators. Tech. Rep. NOTTCS-TR-96-4, Department of Computer Science, University of Nottingham, 1996.
 
 [PDF](http://www.cs.nott.ac.uk/~pszgmh/monparsing.pdf)
 
-#### [4]
+##### [4]
 LEIJEN, D., AND MEIJER, E. Parsec: Direct style monadic parser combinators for the real world. Tech. Rep. UU-CS-2001-35, Departement of Computer Science, Universiteit Utrecht, July 2001.
 
 [PDF](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/parsec-paper-letter.pdf)
 
-#### [5]
+##### [5]
 O’SULLIVAN, B., GOERZEN, J., AND STEWART, D. _Real World Haskell_, 1st ed. O’Reilly Media, Inc., 2008, ch. 16, p. 402.
 
 [PDF](http://pv.bstu.ru/flp/RealWorldHaskell.pdf)
