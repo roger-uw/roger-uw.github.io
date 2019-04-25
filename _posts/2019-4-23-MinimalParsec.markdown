@@ -342,6 +342,8 @@ exprPD = chainl1PD (termPD <* manySpcPD) (((Add <$ charPD '+') <|> (Sub <$ charP
 Identity (Right (Sub (Add (Imm 1) (Div (Mul (Var "xyz") (Imm 3)) (Imm 5))) (Add (Imm 6) (Imm 2))))
 ```
 
+#### References
+
 ##### [1]
 HUTTON, G. _Programming in Haskell_, 2nd ed. Cambridge University Press, New York, NY, USA, 2016, ch. 13, pp. 177–195.
 
