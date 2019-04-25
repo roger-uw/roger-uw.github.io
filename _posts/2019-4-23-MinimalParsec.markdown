@@ -134,6 +134,8 @@ sepByBT :: (Fail.MonadFail m, MonadPlus m, Stream s Char) => BTParsecT s m a -> 
 sepByBT a b = liftA2 (:) a (many (b *> a)) <|> pure []
 ```
 
+其中，`sepByBT a b` 意为被 `b` 隔开的一系列 `a`，比如 `sepByBT digit (char ',')` 可将 `"1,2,3"` 解析为 `['1', '2', '3']`。`sepByBT` 中的 `many` 由 `Alternative` 类型类提供，意为零次或多次应用某个 parser；`<|>` 亦由 `Alternative` 类型类提供，在此处起到选择的作用，即 `a <|> b` 先尝试 `a`，若成功则返回 `a`（的值），失败则尝试 `b`。
+
 到此为止，一切看起来都很顺利。然而，如果我们将 `sepByBT` 和 `Text.Parsec` 中的 [`sepBy`](http://hackage.haskell.org/package/parsec-3.1.13.0/docs/src/Text.Parsec.Combinator.html#sepBy) 比较，就会发现它们的表现是不同的。
 
 ```
@@ -162,7 +164,7 @@ _`Text.Parsec` 中原本的 `sepBy` 使用了单子风格，此处为了与 `sep
 liftA2 (:) (char ',' *> digit) (many (char ',' *> digit)) <|> pure []
 ```
 
-此处，`char ',' *> digit` 成功消耗了 `','`，随后期望得到 `digit`，却发现已经到了序列尾，于是产生了错误信息。同时，由于已经消耗了一个 token（被 `char ','` 消耗的 `','`），`<|>` 右侧的 `pure []` 不再被尝试。而对于 `sepByBT` 来说，在 `charBT ',' *> digitBT` 消耗了 `','` 并失败之后，`<|>` 会**恢复**到输入被消耗前的位置尝试执行 `pure []`。由于 `pure []` 永远成功并返回 `[]`，我们便得到了上面的结果。
+此处，`char ',' *> digit` 成功消耗了 `','`，随后期望得到 `digit`，却发现已经到了序列尾，于是产生了错误信息。同时，由于已经消耗了一个 token（被 `char ','` 消耗的 `','`），按照 `Text.Parsec` 中 `<|>` 的定义，其右侧的 `pure []` 不再被尝试。而对于 `sepByBT` 来说，在 `charBT ',' *> digitBT` 消耗了 `','` 并失败之后，`<|>` 会**恢复**到输入被消耗前的位置尝试执行 `pure []`。由于 `pure []` 永远成功并返回 `[]`，我们便得到了上面的结果。
 
 若用 `Text.Parsec` 的行为进行类比，`BTParsecT` 相当于到处都加上了 `try`，而 `try` 是很贵的 [[5]](#5)。[[4]](#4) 也指出，full backtracking 可能会导致严重的空间泄露，同时也会让提供精准的错误信息变得困难。为了解决这些问题，[[4]](#4) 提供了一种默认 predictive 的 Parsec 实现思路——实际上，[[4]](#4) 就是 `Text.Parsec` 的原型。上文提到过，我们并不关心详细的错误信息，所以我们参考 [[4]](#4) 中的基础实现即可。[[4]](#4) 中基础的 `Parser` 类型定义如下。
 
