@@ -4,4 +4,4 @@ title: About
 permalink: /about/
 ---
 
-About
+现代魔法修炼绝赞努力中
