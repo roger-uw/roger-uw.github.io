@@ -9,7 +9,7 @@ tags:
   - F-algebra
 ---
 
-主要参考：
+## 主要参考
 
 [University of Illinois - CS522 - Programming Language Semantics (Fall 2018) - Conventional Semantic Approaches](http://fsl.cs.illinois.edu/images/c/ca/CS522-Fall-2018-basic-semantics.pdf)
 
@@ -34,7 +34,7 @@ tags:
 * {$(S \cup \\{\perp\\}, \leq^S_\perp)$}：扩充了一个底（bottom）元素的集合 {$S$} 和二元关系 {$\leq^S_\perp$} 构成一个偏序集。对于任意 {$a, b \in S \cup \\{\perp\\}$}，当且仅当 {$a = b$} 或 {$a = \perp$} 时，{$a \leq^S_\perp b$}。在指称语义中，像这样用 {$\perp$} 扩充集合很常见，其中 {$\perp$} 用于表示*未定义值（undefined）*。{$S \cup \\{\perp\\}$} 可简写为 {$S_\perp$}，称作*基本域（primitive domain）*或*平坦域（flat domain）*。
 * {$(A \rightharpoondown B, \preceq)$}：从 {$A$} 到 {$B$} 的偏函数（partial function）构成的集合和信息量关系（informativeness relation）{$\preceq$} 构成一个偏序集。对于偏函数 {$f, g : A \rightharpoondown B$}，我们称 {$f$} 的信息量少于或等于 {$g$}，当且仅当对于任意 {$a \in A$}，要么 {$f(a)$} 未定义，要么 {$f(a)$} 和 {$g(a)$} 均有定义且 {$f(a) = g(a)$}。
 
-有时候，偏序集可以用哈斯图（Hasse diagram）来图形化描述。在哈斯图中，偏序集的每个元素都被绘制为一个（可能带标签的）点，点之间的连接线的绘制遵循以下规则：
+有时候，偏序集可以用**哈斯图（Hasse diagram）**来图形化描述。在哈斯图中，偏序集的每个元素都被绘制为一个（可能带标签的）点，点之间的连接线的绘制遵循以下规则：
 
 * 若 {$x$} 和 {$y$} 是偏序集的元素且 {$x \sqsubseteq y$}，那么对应 {$x$} 的点画在对应 {$y$} 的点下方。
 
@@ -42,11 +42,21 @@ tags:
 
 对于偏序集 {$(D, \sqsubseteq)$} 和 {$X \subseteq D$}，元素 {$p \in D$} 被称作 {$X$} 的**上界（upper bound）**，当且仅当对于任意 {$x \in X$}，{$x \sqsubseteq p$}。以及，当且仅当 {$p$} 是一个上界，且对于 {$X$} 的其它任意上界 {$q$}，都有 {$p \sqsubseteq q$} 时，{$p$} 被称为**最小上界（least upper bound, LUB）**或上确界，写作 {$\sqcup X$}。
 
-上界和最小上界并不一定总是存在。比如，若 {$D = X = \\{x,y\\}$} 且 {$\sqsubseteq$} 是恒等关系，那么 {$X$} 没有上界。即使上界存在，最小上界也不一定存在。比如，若 {$D = \\{a, b, c, d, e\\}$}，{$\sqsubseteq$} 定义为 {$a \sqsubseteq c$}，{$a \sqsubseteq d$}，{$b \sqsubseteq c$}，{$b \sqsubseteq d$}，{$c \sqsubseteq e$}，{$d \sqsubseteq e$}（如下图），那么 {$D$} 的任意子集都存在上界，但集合 {$\\{a, b\\}$} 没有最小上界。由于反对称性，最小上界存在即唯一。
+上界和最小上界并不一定总是存在。比如，若 {$D = X = \\{x,y\\}$} 且 {$\sqsubseteq$} 是恒等关系，那么 {$X$} 没有上界。即使上界存在，最小上界也不一定存在。比如，若 {$D = \\{a, b, c, d, e\\}$}，{$\sqsubseteq$} 定义为 {$a \sqsubseteq c$}，{$a \sqsubseteq d$}，{$b \sqsubseteq c$}，{$b \sqsubseteq d$}，{$c \sqsubseteq e$}，{$d \sqsubseteq e$}（如下图），那么 {$D$} 的任意子集都存在上界，但集合 {$\\{a, b\\}$} 没有最小上界（因为 {$c$}，{$d$} 和 {$e$} 均为 {$\\{a, b\\}$} 上界，且 {$c \sqsubseteq e$}, {$d \sqsubseteq e$}，但是 {$c$} 和 {$d$} 之间不存在序关系）。最后，由于反对称性，最小上界存在即唯一。
 
 ![HasseDiagram]({{ "/assets/F-algebra/Hasse.svg" | absolute_url }})
 
 ### 完全偏序
+
+对于偏序集 {$(D, \sqsubseteq)$}，{$D$} 中的一条**链（chain）**被定义为 {$D$} 中的元素组成的一个无限序列 {$d_0 \sqsubseteq d_1 \sqsubseteq d_2 \sqsubseteq \dotsb \sqsubseteq d_n \sqsubseteq \dotsb$}，也可使用集合记法写作 {$\\{d_n | n \in Nat\\}$}。如果存在 {$n \in Nat$} 使得对于所有的 {$m \geq n$} 都有 {$d_m = d_{m+1}$}，那么这条链就被称为是**稳定的（stationary）**。
+
+如果 {$D$} 是有限的，那么任意链都是稳定的。更一般地，如果对于某个已知的 {$x \in D$}，只有有限个 {$y \in D$} 满足 {$x \sqsubseteq y$}，那么任何包含 {$x$} 的链都是稳定的。
+
+如果 {$\\{d_n | n \in Nat\\}$} 是 {$(D, \sqsubseteq)$} 中的一条链且有最小上界，我们将其最小上界记作 {$\bigsqcup_{n \in Nat} d_n$} 或者 {$\sqcup d_n$}。
+
+当且仅当偏序集 {$(D, \sqsubseteq)$} 中的任意链都有最小上界时，{$(D, \sqsubseteq)$} 被称作一个**完全偏序（complete partial order, CPO）**。
+
+当且仅当 {$(D, \sqsubseteq)$} 包含一个最小元素时，它被称作**含底的（with bottom, bottomed）**。这个最小元素一般写作 {$\perp$}，含底偏序集则写作 {$(D, \sqsubseteq, \perp)$}。
 
 ### 单调和连续函数
 
