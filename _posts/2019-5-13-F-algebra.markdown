@@ -42,7 +42,7 @@ tags:
 
 对于偏序集 {$(D, \sqsubseteq)$} 和 {$X \subseteq D$}，元素 {$p \in D$} 被称作 {$X$} 的**上界（upper bound）**，当且仅当对于任意 {$x \in X$}，{$x \sqsubseteq p$}。以及，当且仅当 {$p$} 是一个上界，且对于 {$X$} 的其它任意上界 {$q$}，都有 {$p \sqsubseteq q$} 时，{$p$} 被称为**最小上界（least upper bound, LUB）**或上确界，写作 {$\sqcup X$}。
 
-上界和最小上界并不一定总是存在。比如，若 {$D = X = \\{x,y\\}$} 且 {$\sqsubseteq$} 是恒等关系，那么 {$X$} 没有上界。即使上界存在，最小上界也不一定存在。比如，若 {$D = \\{a, b, c, d, e\\}$}，{$\sqsubseteq$} 定义为 {$a \sqsubseteq c$}，{$a \sqsubseteq d$}，{$b \sqsubseteq c$}，{$b \sqsubseteq d$}，{$c \sqsubseteq e$}，{$d \sqsubseteq e$}（如下图），那么 {$D$} 的任意子集都存在上界，但集合 {$\\{a, b\\}$} 没有最小上界（因为 {$c$}，{$d$} 和 {$e$} 均为 {$\\{a, b\\}$} 上界，且 {$c \sqsubseteq e$}, {$d \sqsubseteq e$}，但是 {$c$} 和 {$d$} 之间不存在序关系）。最后，由于反对称性，最小上界存在即唯一。
+上界和最小上界并不一定总是存在。比如，若 {$D = X = \\{x,y\\}$} 且 {$\sqsubseteq$} 是恒等关系，那么 {$X$} 没有上界。即使上界存在，最小上界也不一定存在。比如，若 {$D = \\{a, b, c, d, e\\}$}，{$\sqsubseteq$} 定义为 {$a \sqsubseteq c$}，{$a \sqsubseteq d$}，{$b \sqsubseteq c$}，{$b \sqsubseteq d$}，{$c \sqsubseteq e$}，{$d \sqsubseteq e$}（如下图），那么 {$D$} 的任意子集都存在上界，但集合 {$\\{a, b\\}$} 没有最小上界（因为 {$c$}，{$d$} 和 {$e$} 均为 {$\\{a, b\\}$} 的上界，且 {$c \sqsubseteq e$}, {$d \sqsubseteq e$}，但是 {$c$} 和 {$d$} 之间不存在序关系）。最后，由于反对称性，最小上界存在即唯一。
 
 ![HasseDiagram]({{ "/assets/F-algebra/Hasse.svg" | absolute_url }})
 
