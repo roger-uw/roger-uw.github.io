@@ -48,7 +48,7 @@ tags:
 
 ### 完全偏序
 
-对于偏序集 {$(D, \sqsubseteq)$}，{$D$} 中的一条**链（chain）**被定义为 {$D$} 中的元素组成的一个无限序列 {$d_0 \sqsubseteq d_1 \sqsubseteq d_2 \sqsubseteq \dotsb \sqsubseteq d_n \sqsubseteq \dotsb$}，也可使用集合记法写作 {$\\{d_n | n \in Nat\\}$}。如果存在 {$n \in Nat$} 使得对于所有的 {$m \geq n$} 都有 {$d_m = d_{m+1}$}，那么这条链就被称为是**稳定的（stationary）**。
+对于偏序集 {$(D, \sqsubseteq)$}，{$D$} 中的一条**链（chain）**被定义为 {$D$} 中的元素组成的一个无限序列 {$d_0 \sqsubseteq d_1 \sqsubseteq d_2 \sqsubseteq \dotsb \sqsubseteq d_n \sqsubseteq \dotsb$}，也可使用集合记法写作 {$\\{d_n \| n \in Nat\\}$}。如果存在 {$n \in Nat$} 使得对于所有的 {$m \geq n$} 都有 {$d_m = d_{m+1}$}，那么这条链就被称为是**稳定的（stationary）**。
 
 如果 {$D$} 是有限的，那么任意链都是稳定的。更一般地，如果对于某个已知的 {$x \in D$}，只有有限个 {$y \in D$} 满足 {$x \sqsubseteq y$}，那么任何包含 {$x$} 的链都是稳定的。
 
