@@ -52,7 +52,7 @@ tags:
 
 如果 {$D$} 是有限的，那么任意链都是稳定的。更一般地，如果对于某个已知的 {$x \in D$}，只有有限个 {$y \in D$} 满足 {$x \sqsubseteq y$}，那么任何包含 {$x$} 的链都是稳定的。
 
-如果 {$\\{d_n | n \in Nat\\}$} 是 {$(D, \sqsubseteq)$} 中的一条链且有最小上界，我们将其最小上界记作 {$\bigsqcup_{n \in Nat} d_n$} 或者 {$\sqcup d_n$}。
+如果 {$\\{d_n \| n \in Nat\\}$} 是 {$(D, \sqsubseteq)$} 中的一条链且有最小上界，我们将其最小上界记作 {$\bigsqcup_{n \in Nat} d_n$} 或者 {$\sqcup d_n$}。
 
 当且仅当偏序集 {$(D, \sqsubseteq)$} 中的任意链都有最小上界时，{$(D, \sqsubseteq)$} 被称作一个**完全偏序（complete partial order, CPO）**。
 
