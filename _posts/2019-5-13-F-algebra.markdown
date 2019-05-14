@@ -40,7 +40,7 @@ tags:
 
 * 当且仅当 {$x \sqsubseteq y$} 且在偏序集中不存在一个元素 {$z$} 严格处于 {$x$} 和 {$y$} 之间，也就是 {$x$} 和 {$y$} 之间的序关系不是由于传递性时，才能在代表 {$x$} 和 {$y$} 的点之间连线。
 
-对于偏序集 {$(D, \sqsubseteq)$} 和 {$X \subseteq D$}，元素 {$p \in D$} 被称作 {$X$} 的**上界（upper bound）**，当且仅当对于任意 {$x \in X$}，{$x \subseteq p$}。以及，当且仅当 {$p$} 是一个上界，且对于 {$X$} 的其它任意上界 {$q$}，都有 {$p \sqsubseteq q$} 时，{$p$} 被称为**最小上界（least upper bound, LUB）**或上确界，写作 {$\sqcup X$}。
+对于偏序集 {$(D, \sqsubseteq)$} 和 {$X \subseteq D$}，元素 {$p \in D$} 被称作 {$X$} 的**上界（upper bound）**，当且仅当对于任意 {$x \in X$}，{$x \sqsubseteq p$}。以及，当且仅当 {$p$} 是一个上界，且对于 {$X$} 的其它任意上界 {$q$}，都有 {$p \sqsubseteq q$} 时，{$p$} 被称为**最小上界（least upper bound, LUB）**或上确界，写作 {$\sqcup X$}。
 
 上界和最小上界并不一定总是存在。比如，若 {$D = X = \\{x,y\\}$} 且 {$\sqsubseteq$} 是恒等关系，那么 {$X$} 没有上界。即使上界存在，最小上界也不一定存在。比如，若 {$D = \\{a, b, c, d, e\\}$}，{$\sqsubseteq$} 定义为 {$a \sqsubseteq c$}，{$a \sqsubseteq d$}，{$b \sqsubseteq c$}，{$b \sqsubseteq d$}，{$c \sqsubseteq e$}，{$d \sqsubseteq e$}（如下图），那么 {$D$} 的任意子集都存在上界，但集合 {$\\{a, b\\}$} 没有最小上界。由于反对称性，最小上界存在即唯一。
 
