@@ -58,6 +58,12 @@ tags:
 
 当且仅当 {$(D, \sqsubseteq)$} 包含一个最小元素时，它被称作**含底的（with bottom, bottomed）**。这个最小元素一般写作 {$\perp$}，含底偏序集则写作 {$(D, \sqsubseteq, \perp)$}。
 
+例子：
+
+* {$(\mathcal{P}(S), \subseteq, \emptyset)$} 是一个含底完全偏序。
+
 ### 单调和连续函数
+
+
 
 ### 不动点理论
