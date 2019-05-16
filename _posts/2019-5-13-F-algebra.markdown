@@ -82,7 +82,7 @@ tags:
 
 含底完全偏序的合成：
 
-* 如果 {$\\{(S_i, \leq_i, \perp)\\}\_{i \in I}$} 是一族底相同的的含底完全偏序，即对于任何 {i \neq j \in I}，{$S_i \cap S_j = \\{\perp\\}$}，那么 {$\bigcup_{i \in I}(S_i, \leq_i, \perp)$} 也是含底完全偏序。
+* 如果 {$\\{(S_i, \leq_i, \perp)\\}\_{i \in I}$} 是一族底相同的的含底完全偏序，即对于任何 {$i \neq j \in I$}，{$S_i \cap S_j = \\{\perp\\}$}，那么 {$\bigcup_{i \in I}(S_i, \leq_i, \perp)$} 也是含底完全偏序。
 
 ### 单调和连续函数
 
