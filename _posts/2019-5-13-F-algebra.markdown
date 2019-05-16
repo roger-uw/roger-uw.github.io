@@ -30,8 +30,13 @@ tags:
 例子：
 
 * {$(Nat, \leq)$}：自然数集和“小于或等于”构成一个全序集。
+
 * {$(Nat \cup \\{\infty\\}, \leq)$}：加入无穷大的自然数集和“小于或等于”构成一个全序集。
+
+* {$(S, =)$}：平坦集合 {$S$} 和恒等关系（identity）构成一个偏序集。
+
 * {$(S \cup \\{\perp\\}, \leq^S_\perp)$}：扩充了一个底（bottom）元素的集合 {$S$} 和二元关系 {$\leq^S_\perp$} 构成一个偏序集。对于任意 {$a, b \in S \cup \\{\perp\\}$}，当且仅当 {$a = b$} 或 {$a = \perp$} 时，{$a \leq^S_\perp b$}。在指称语义中，像这样用 {$\perp$} 扩充集合很常见，其中 {$\perp$} 用于表示*未定义值（undefined）*。{$S \cup \\{\perp\\}$} 可简写为 {$S_\perp$}，称作*基本域（primitive domain）*或*平坦域（flat domain）*。
+
 * {$(A \rightharpoondown B, \preceq)$}：从 {$A$} 到 {$B$} 的偏函数（partial function）构成的集合和信息量关系（informativeness relation）{$\preceq$} 构成一个偏序集。对于偏函数 {$f, g : A \rightharpoondown B$}，我们称 {$f$} 的信息量少于或等于 {$g$}，当且仅当对于任意 {$a \in A$}，要么 {$f(a)$} 未定义，要么 {$f(a)$} 和 {$g(a)$} 均有定义且 {$f(a) = g(a)$}。
 
 偏序集的合成：
@@ -89,5 +94,7 @@ tags:
 除非特殊说明，下文提及的完全偏序均默认为含底完全偏序。
 
 ### 单调和连续函数
+
+如果 {$(D, \sqsubseteq)$} 和 {$(D^', \sqsubseteq^')$}
 
 ### 不动点理论
