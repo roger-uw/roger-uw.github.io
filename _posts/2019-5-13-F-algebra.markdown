@@ -81,7 +81,7 @@ tags:
 
 * {$(S, =)$} 总是完全偏序。如果 {$S$} 仅有一个元素则含底。
 
-* {$(S \cup \\{\perp\\}, \leq^S_\perp, \perp)$} 是含底完全偏序，经常像 {$(S \cup \\{\perp\\}, \leq^S_\perp)$} 一样被简写为 {$S_\perp$}。在指称语义中，有趣而重要的一点是，基本域 {$S_\perp$} 等价于偏函数集 {$\\{*\\} \rightharpoondown S$}，其中 {$\\{*\\}$} 表示一个单元素集合。
+* {$(S \cup \\{\perp\\}, \leq^S_\perp, \perp)$} 是含底完全偏序，经常像 {$(S \cup \\{\perp\\}, \leq^S_\perp)$} 一样被简写为 {$S_\perp$}。在指称语义中，有趣而重要的一点是，基本域 {$S_\perp$} 等价于偏函数集 {$\\{\*\\} \rightharpoondown S$}，其中 {$\\{\*\\}$} 表示一个单元素集合。
 
 * {$(A \rightharpoondown B, \preceq, \perp)$} 是含底完全偏序。其底 {$\perp : A \rightharpoondown B$} 为对每个 {$A$} 的元素都未定义的函数。
 
