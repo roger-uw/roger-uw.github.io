@@ -95,6 +95,6 @@ tags:
 
 ### 单调和连续函数
 
-如果 {$(D, \sqsubseteq)$} 和 {$(D', \sqsubseteq')$}
+如果 {$(D, \sqsubseteq)$} 和 {$(D', \sqsubseteq')$} 均为偏序集且 {$\mathcal{F} : D \to D'$} 是一个函数，那么当且仅当对于任何满足 {$x \sqsubseteq y$} 的 {$x, y \in D$}，都有 {$\mathcal{F}(x) \sqsubseteq' \mathcal{F}(y)$} 时，{$\mathcal{F}$} 被称作是**单调的（monotone）**。如果 {$\mathcal{F}$} 是单调的，我们可以直接写 {$\mathcal{F} : (D, \sqsubseteq) \to (D', \sqsubseteq')$}。{$Mon((D, \sqsubseteq), (D', \sqsubseteq'))$} 表示从 {$(D, \sqsubseteq)$} 到 {$(D', \sqsubseteq')$} 的单调函数的集合。
 
 ### 不动点理论
