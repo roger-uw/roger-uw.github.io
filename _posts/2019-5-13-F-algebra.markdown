@@ -36,9 +36,9 @@ tags:
 
 偏序集的合成：
 
-* 如果 {$\\{(S_i, \leq_i)\\}\_{i \in I}$} 是一族偏序集，其中对于任意 {$i \neq j \in I$}，{$S_i \cap S_j = \emptyset$}，那么 {$\bigcup_{i \in I}(S_i, \leq_i) = (\bigcup_{i \in I}S_i, \bigcup_{i \in I}\leq_i)$} 也是偏序集，其中 {$\bigcup_{i \in I}\leq_i$} 定义为 {$a (\bigcup_{i \in I}\leq_i) b$} 当且仅当存在 {$i \in I$} 使得 {$a, b \in S_i$} 且 {$a \leq_i b$}。
+* 如果 {$\\{(S_i, \leq_itest)\\}\_{i \in I}$} 是一族偏序集，其中对于任意 {$i \neq j \in I$}，{$S_i \cap S_j = \emptyset$}，那么 {$\bigcup_{i \in I}(S_i, \leq_i) = (\bigcup_{i \in I}S_i, \bigcup_{i \in I}\leq_i)$} 也是偏序集，其中 {$\bigcup_{i \in I}\leq_i$} 定义为 {$a (\bigcup_{i \in I}\leq_i) b$} 当且仅当存在 {$i \in I$} 使得 {$a, b \in S_i$} 且 {$a \leq_i b$}。
 
-* 如果 {$\\{(S_i, \leq_i)\\}_{i \in I}$} 是一族偏序集，那么 {$\prod_{i \in I}(S_i, \leq_i) = (\prod_{i \in I}S_i, \prod_{i \in I}\leq_i)$} 也是偏序集，其中 {$\prod_{i \in I}\leq_i$} 定义为 {$\\{a_i\\}_{i \in I} (\prod_{i \in I}\leq_i) \\{b_i\\}_{i \in I}$} 当且仅当对于所有 {$i \in I$}，{$a_i \leq_i b_i$}。
+* 如果 {$\\{(S_i, \leq_i)\\}\_{i \in I}$} 是一族偏序集，那么 {$\prod_{i \in I}(S_i, \leq_i) = (\prod_{i \in I}S_i, \prod_{i \in I}\leq_i)$} 也是偏序集，其中 {$\prod_{i \in I}\leq_i$} 定义为 {$\\{a_i\\}_{i \in I} (\prod_{i \in I}\leq_i) \\{b_i\\}_{i \in I}$} 当且仅当对于所有 {$i \in I$}，{$a_i \leq_i b_i$}。
 
 有时候，偏序集可以用**哈斯图（Hasse diagram）**来图形化描述。在哈斯图中，偏序集的每个元素都被绘制为一个（可能带标签的）点，点之间的连接线的绘制遵循以下规则：
 
