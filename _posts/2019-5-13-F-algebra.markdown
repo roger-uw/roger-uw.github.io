@@ -95,6 +95,6 @@ tags:
 
 ### 单调和连续函数
 
-如果 {$(D, \sqsubseteq)$} 和 {$(D^', \sqsubseteq^')$}
+如果 {$(D, \sqsubseteq)$} 和 {$(D', \sqsubseteq')$}
 
 ### 不动点理论
