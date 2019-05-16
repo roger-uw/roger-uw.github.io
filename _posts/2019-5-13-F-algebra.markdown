@@ -34,6 +34,12 @@ tags:
 * {$(S \cup \\{\perp\\}, \leq^S_\perp)$}：扩充了一个底（bottom）元素的集合 {$S$} 和二元关系 {$\leq^S_\perp$} 构成一个偏序集。对于任意 {$a, b \in S \cup \\{\perp\\}$}，当且仅当 {$a = b$} 或 {$a = \perp$} 时，{$a \leq^S_\perp b$}。在指称语义中，像这样用 {$\perp$} 扩充集合很常见，其中 {$\perp$} 用于表示*未定义值（undefined）*。{$S \cup \\{\perp\\}$} 可简写为 {$S_\perp$}，称作*基本域（primitive domain）*或*平坦域（flat domain）*。
 * {$(A \rightharpoondown B, \preceq)$}：从 {$A$} 到 {$B$} 的偏函数（partial function）构成的集合和信息量关系（informativeness relation）{$\preceq$} 构成一个偏序集。对于偏函数 {$f, g : A \rightharpoondown B$}，我们称 {$f$} 的信息量少于或等于 {$g$}，当且仅当对于任意 {$a \in A$}，要么 {$f(a)$} 未定义，要么 {$f(a)$} 和 {$g(a)$} 均有定义且 {$f(a) = g(a)$}。
 
+偏序集的合成：
+
+* 如果 {$\\{(S_i, \leq_i)\\}_{i \in I}$} 是一族偏序集，其中对于任意 {$i \neq j \in I$}，{$S_i \cap S_j = \emptyset$}，那么 {$\bigcup_{i \in I}(S_i, \leq_i) = (\bigcup_{i \in I}S_i, \bigcup_{i \in I}\leq_i)$} 也是偏序集，其中 {$\bigcup_{i \in I}\leq_i$} 定义为 {$a (\bigcup_{i \in I}\leq_i) b$} 当且仅当存在 {$i \in I$} 使得 {$a, b \in S_i$} 且 {$a \leq_i b$}。
+
+* 如果 {$\\{(S_i, \leq_i)\\}_{i \in I}$} 是一族偏序集，那么 {$\prod_{i \in I}(S_i, \leq_i) = (\prod_{i \in I}S_i, \prod_{i \in I}\leq_i)$} 也是偏序集，其中 {$\prod_{i \in I}\leq_i$} 定义为 {$\\{a_i\\}_{i \in I} (\prod_{i \in I}\leq_i) \\{b_i\\}_{i \in I}$} 当且仅当对于所有 {$i \in I$}，{$a_i \leq_i b_i$}。
+
 有时候，偏序集可以用**哈斯图（Hasse diagram）**来图形化描述。在哈斯图中，偏序集的每个元素都被绘制为一个（可能带标签的）点，点之间的连接线的绘制遵循以下规则：
 
 * 若 {$x$} 和 {$y$} 是偏序集的元素且 {$x \sqsubseteq y$}，那么对应 {$x$} 的点画在对应 {$y$} 的点下方。
@@ -52,7 +58,7 @@ tags:
 
 如果 {$D$} 是有限的，那么任意链都是稳定的。更一般地，如果对于某个已知的 {$x \in D$}，只有有限个 {$y \in D$} 满足 {$x \sqsubseteq y$}，那么任何包含 {$x$} 的链都是稳定的。
 
-如果 {$\\{d_n \| n \in Nat\\}$} 是 {$(D, \sqsubseteq)$} 中的一条链且有最小上界，我们将其最小上界记作 {$\bigsqcup_{n \in Nat} d_n$} 或者简记为 {$\sqcup d_n$}。
+如果 {$\\{d_n \| n \in Nat\\}$} 是 {$(D, \sqsubseteq)$} 中的一条链且有最小上界，我们将其最小上界写作 {$\bigsqcup_{n \in Nat} d_n$} 或者简写为 {$\sqcup d_n$}。
 
 当且仅当偏序集 {$(D, \sqsubseteq)$} 中的任意链都有最小上界时，{$(D, \sqsubseteq)$} 被称作一个**完全偏序（complete partial order, CPO）**。
 
@@ -60,7 +66,23 @@ tags:
 
 例子：
 
-* {$(\mathcal{P}(S), \subseteq, \emptyset)$} 是一个含底完全偏序。
+* {$(\mathcal{P}(S), \subseteq, \emptyset)$} 是含底完全偏序。
+
+* {$(Nat, \leq)$} 以 {$0$} 为底，但是不完全（链 {$0 \leq 1 \leq 2 \leq \dotsb \leq n \leq \dotsb$} 没有上界）。
+
+* {$(Nat, \geq)$} 是完全偏序但不含底。
+
+* {$(Nat \cup \\{\infty\\}, \leq, 0)$} 是含底完全偏序。其中的任何链要么稳定，要么以 {$\infty$} 为最小上界。
+
+* {$(S, =)$} 总是完全偏序。如果 {$S$} 仅有一个元素则含底。
+
+* {$(S \cup \\{\perp\\}, \leq^S_\perp, \perp)$} 是含底完全偏序，经常像 {$(S \cup \\{\perp\\}, \leq^S_\perp)$} 一样被简写为 {$S_\perp$}。在指称语义中，有趣而重要的一点是，基本域 {$S_\perp$} 等价于偏函数集 {$\\{*\\} \rightharpoondown S$}，其中 {$\\{*\\}$} 表示一个单元素集合。
+
+* {$(A \rightharpoondown B, \preceq, \perp)$} 是含底完全偏序。其底 {$\perp : A \rightharpoondown B$} 为对每个 {$A$} 的元素都未定义的函数。
+
+含底完全偏序的合成：
+
+* 如果 {$\\{(S_i, \leq_i, \perp)\\}_{i \in I}$} 是一族底相同的的含底完全偏序，即对于任何 {i \neq j \in I}，{$S_i \cap S_j = \\{\perp\\}$}，那么 {$\bigcup_{i \in I}(S_i, \leq_i, \perp)$} 也是含底完全偏序。
 
 ### 单调和连续函数
 
