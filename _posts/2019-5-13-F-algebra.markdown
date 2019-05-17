@@ -35,7 +35,7 @@ tags:
 
 * {$(S, =)$}：平坦集合 {$S$} 和恒等关系（identity）构成一个偏序集。
 
-* {$(S \cup \\{\perp\\}, \leq^S_\perp)$}：扩充了一个底（bottom）元素的集合 {$S$} 和二元关系 {$\leq^S_\perp$} 构成一个偏序集。对于任意 {$a, b \in S \cup \\{\perp\\}$}，当且仅当 {$a = b$} 或 {$a = \perp$} 时，{$a \leq^S_\perp b$}。在指称语义中，像这样用 {$\perp$} 扩充集合很常见，其中 {$\perp$} 用于表示*未定义值（undefined）*。{$S \cup \\{\perp\\}$} 可简写为 {$S_\perp$}，称作*基本域（primitive domain）*或*平坦域（flat domain）*。
+* {$(S \cup \\{\perp\\}, \leq^S_\perp)$}：扩充了一个底（bottom）元素的集合 {$S$} 和二元关系 {$\leq^S_\perp$} 构成一个偏序集。对于任意 {$a, b \in S \cup \\{\perp\\}$}，当且仅当 {$a = b$} 或 {$a = \perp$} 时，{$a \leq^S_\perp b$}。在指称语义中，像这样用 {$\perp$} 扩充集合很常见，其中 {$\perp$} 用于表示**未定义值（undefined）**。{$S \cup \\{\perp\\}$} 可简写为 {$S_\perp$}，称作**基本域（primitive domain）**或**平坦域（flat domain）**。
 
 * {$(A \rightharpoondown B, \preceq)$}：从 {$A$} 到 {$B$} 的偏函数（partial function）构成的集合和信息量关系（informativeness relation）{$\preceq$} 构成一个偏序集。对于偏函数 {$f, g : A \rightharpoondown B$}，我们称 {$f$} 的信息量少于或等于 {$g$}，当且仅当对于任意 {$a \in A$}，要么 {$f(a)$} 未定义，要么 {$f(a)$} 和 {$g(a)$} 均有定义且 {$f(a) = g(a)$}。
 
@@ -97,7 +97,7 @@ tags:
 
 如果 {$(D, \sqsubseteq)$} 和 {$(D', \sqsubseteq')$} 均为偏序集且 {$\mathcal{F} : D \to D'$} 是一个函数，那么当且仅当对于任何满足 {$x \sqsubseteq y$} 的 {$x, y \in D$}，都有 {$\mathcal{F}(x) \sqsubseteq' \mathcal{F}(y)$} 时，{$\mathcal{F}$} 被称作是**单调的（monotone）**。如果 {$\mathcal{F}$} 是单调的，我们可以直接写 {$\mathcal{F} : (D, \sqsubseteq) \to (D', \sqsubseteq')$}。{$Mon((D, \sqsubseteq), (D', \sqsubseteq'))$} 表示从 {$(D, \sqsubseteq)$} 到 {$(D', \sqsubseteq')$} 的单调函数的集合。
 
-单调函数*保持*链，也就是说，只要 {$\\{d_n \| n \in Nat\\}$} 是 {$(D, \sqsubseteq)$} 中的链，{$\\{\mathcal{F}(d_n) \| n \in Nat\\}$} 就一定是 {$(D', \sqsubseteq')$} 中的链。
+单调函数**保持**链，也就是说，只要 {$\\{d_n \| n \in Nat\\}$} 是 {$(D, \sqsubseteq)$} 中的链，{$\\{\mathcal{F}(d_n) \| n \in Nat\\}$} 就一定是 {$(D', \sqsubseteq')$} 中的链。
 
 如果 {$(D, \sqsubseteq)$} 和 {$(D', \sqsubseteq')$} 均为完全偏序，对于 {$(D, \sqsubseteq)$} 中的任何链 {$\\{d_n \| n \in Nat\\}$} 都有 {$\sqcup \mathcal{F}(d_n) \sqsubseteq' \mathcal{F}(\sqcup d_n)$}。论证如下：由于 {$\mathcal{F}$} 是单调的，且根据最小上界的性质，对于任何 {$n \in Nat$}，{$d_n \sqsubseteq \sqcup d_n$}，所以对于任何 {$n \in Nat$}，都有 {$\mathcal{F}(d_n) \sqsubseteq' \mathcal{F}(\sqcup d_n)$}，或者说，{$\mathcal{F}(\sqcup d_n)$} 是 {$\\{\mathcal{F}(d_n) \| n \in Nat\\}$} 的一个上界。又因为 {$\sqcup \mathcal{F}(d_n)$} 是 {$\\{\mathcal{F}(d_n) \| n \in Nat\\}$} 的最小上界，所以 {$\sqcup \mathcal{F}(d_n) \sqsubseteq' \mathcal{F}(\sqcup d_n)$}。
 
