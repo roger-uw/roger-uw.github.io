@@ -99,6 +99,6 @@ tags:
 
 单调函数*保持*链，也就是说，只要 {$\\{d_n \| n \in Nat\\}$} 是 {$(D, \sqsubseteq)$} 中的链，{$\\{\mathcal{F}(d_n) \| n \in Nat\\}$} 就一定是 {$(D', \sqsubseteq')$} 中的链。
 
-如果 {$(D, \sqsubseteq)$} 和 {$(D', \sqsubseteq')$} 均为完全偏序，对于 {$(D, \sqsubseteq)$} 中的任何链 {$\\{d_n \| n \in Nat\\}$} 都有 {$\sqcup \mathcal{F}(d_n) \sqsubseteq' \mathcal{F}(\sqcup d_n)$}。由于 {$\mathcal{F}$} 是单调的，而且根据最小上界的性质，对于任何 {$n \in Nat$}，{$d_n \sqsubseteq \sqcup d_n$}，所以对任何 {$n \in Nat$} {$\mathcal{F}(d_n) \sqsubseteq' \mathcal{F}(\sqcup d_n)$}，或者说，{$\mathcal{F}(\sqcup d_n)$} 是 {$\\{\mathcal{F}(d_n) \| n \in Nat\\}$} 的一个上界。又因为 {$\sqcup \mathcal{F}(d_n)$} 是 {$\\{\mathcal{F}(d_n) \| n \in Nat\\}$} 的最小上界，所以 {$\sqcup \mathcal{F}(d_n) \sqsubseteq' \mathcal{F}(\sqcup d_n)$}。
+如果 {$(D, \sqsubseteq)$} 和 {$(D', \sqsubseteq')$} 均为完全偏序，对于 {$(D, \sqsubseteq)$} 中的任何链 {$\\{d_n \| n \in Nat\\}$} 都有 {$\sqcup \mathcal{F}(d_n) \sqsubseteq' \mathcal{F}(\sqcup d_n)$}。论证如下：由于 {$\mathcal{F}$} 是单调的，且根据最小上界的性质，对于任何 {$n \in Nat$}，{$d_n \sqsubseteq \sqcup d_n$}，所以对于任何 {$n \in Nat$}，都有 {$\mathcal{F}(d_n) \sqsubseteq' \mathcal{F}(\sqcup d_n)$}，或者说，{$\mathcal{F}(\sqcup d_n)$} 是 {$\\{\mathcal{F}(d_n) \| n \in Nat\\}$} 的一个上界。又因为 {$\sqcup \mathcal{F}(d_n)$} 是 {$\\{\mathcal{F}(d_n) \| n \in Nat\\}$} 的最小上界，所以 {$\sqcup \mathcal{F}(d_n) \sqsubseteq' \mathcal{F}(\sqcup d_n)$}。
 
 ### 不动点理论
