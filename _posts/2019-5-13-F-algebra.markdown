@@ -45,7 +45,7 @@ tags:
 
 * 如果 {$\\{(S_i, \leq_i)\\}\_{i \in I}$} 是一族偏序集，那么 {$\prod_{i \in I}(S_i, \leq_i) = (\prod_{i \in I}S_i, \prod_{i \in I}\leq_i)$} 也是偏序集，其中 {$\prod_{i \in I}\leq_i$} 定义为 {$\\{a_i\\}\_{i \in I} (\prod_{i \in I}\leq_i) \\{b_i\\}_{i \in I}$} 当且仅当对于所有 {$i \in I$}，{$a_i \leq_i b_i$}。
 
-对于预序集 {$(D, \prec)$}，可以定义等价关系 {$\sim$} 为对于任意 {$a, b \in D$}，{$a \sim b$} 当且仅当 {$a \prec b$} 且 {$a \prec b$}。利用这个等价关系，我们能在 {$D$} 对于 {$\sim$} 的商集 {$D / \sim$}，也就是 {$\sim$} 的所有等价类的集合，之上构造偏序 {$\prec^\star$}，定义为对于任意 {$a, b \in D$}，{[a]\_\sim \prec^\star [b]\_\sim} 当且仅当 {$a \prec b$}。
+对于预序集 {$(D, \prec)$}，可以定义等价关系 {$\sim$} 为对于任意 {$a, b \in D$}，{$a \sim b$} 当且仅当 {$a \prec b$} 且 {$a \prec b$}。利用这个等价关系，我们能在 {$D$} 对于 {$\sim$} 的商集 {$D / \sim$}，也就是 {$\sim$} 的所有等价类的集合，之上构造偏序 {$\prec^\star$}，定义为对于任意 {$a, b \in D$}，{$[a]\_\sim \prec^\star [b]\_\sim$} 当且仅当 {$a \prec b$}。
 
 有时候，偏序集可以用**哈斯图（Hasse diagram）**来图形化描述。在哈斯图中，偏序集的每个元素都被绘制为一个（可能带标签的）点，点之间的连接线的绘制遵循以下规则：
 
