@@ -59,9 +59,9 @@ tags:
 
 ![HasseDiagram]({{ "/assets/F-algebra/Hasse.svg" | absolute_url }})
 
-我们可以用相似的手段对偶地定义**最大下界（greatest lower bound, GLB）**或**下确界（infimum）**或**交（meet）**。
+我们可以用相似的手段对偶地定义 {$X \subseteq D$} 的**最大下界（greatest lower bound, GLB）**或**下确界（infimum）**或**交（meet）**，写作 {$\sqcap X$}。
 
-对于偏序集 {$(D, \sqsubseteq)$}，如果其中任意一对元素构成的子集都存在最小上界，那么 {$(D, \sqsubseteq)$} 被称为一个**并半格（join-semilattice）**。我们可以对偶地定义 **交半格（join-semilattice）**。如果 {$(D, \sqsubseteq)$} 同时是并半格和交半格，我们称其为**格（lattice）**。如果一个格的所有子集都存在最小上界和最小下界，我们称其为**完全格（complete lattice）**。
+对于偏序集 {$(D, \sqsubseteq)$}，如果其中任意一对元素构成的子集都存在最小上界，那么 {$(D, \sqsubseteq)$} 被称为一个**并半格（join-semilattice）**。我们可以对偶地定义 **交半格（meet-semilattice）**。如果 {$(D, \sqsubseteq)$} 同时是并半格和交半格，我们称其为**格（lattice）**。如果一个格的所有子集都存在最小上界和最小下界，我们称其为**完全格（complete lattice）**。
 
 ### 完全偏序
 
@@ -73,7 +73,7 @@ tags:
 
 当且仅当偏序集 {$(D, \sqsubseteq)$} 中的任意链都有最小上界时，{$(D, \sqsubseteq)$} 被称作一个**完全偏序（complete partial order, CPO）**。
 
-严格地说，此处的完全偏序采用了**链完全偏序（chain-complete partial order)**的定义。
+严格地说，此处的完全偏序采用了**链完全偏序（chain-complete partial order)**的定义。_TODO_ 我们就得到了{$\omega$}**-完全偏序**的定义。
 
 当且仅当 {$(D, \sqsubseteq)$} 包含一个最小元素时，它被称作**含底的（with bottom, bottomed）**。这个最小元素一般写作 {$\perp$}，含底偏序集则写作 {$(D, \sqsubseteq, \perp)$}。
 
