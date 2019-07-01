@@ -35,7 +35,7 @@ tags:
 
 * {$(S, =)$}：平坦集合 {$S$} 和恒等关系（identity）构成一个偏序集。任何两个不同的元素在这个偏序集中都不可比较。像这样序关系只包含了自反序对 {$(x, x)$} 的偏序被称作**离散偏序（discrete partial order）**。
 
-* {$(S \cup \\{\perp\\}, \leq^S_\perp)$}：扩充了一个底（bottom）元素的集合 {$S$} 和二元关系 {$\leq^S_\perp$} 构成一个偏序集。对于任意 {$a, b \in S \cup \\{\perp\\}$}，当且仅当 {$a = b$} 或 {$a = \perp$} 时，{$a \leq^S_\perp b$}。在指称语义中，像这样用 {$\perp$} 扩充集合很常见，其中 {$\perp$} 用于表示**未定义值（undefined）**。{$S \cup \\{\perp\\}$} 可简写为 {$S_\perp$}，称作**基本域（primitive domain）**或**平坦域（flat domain）**。
+* {$(S \cup \\{\perp\\}, \leq^S_\perp)$}：扩充了一个**底（bottom）**元素的集合 {$S$} 和二元关系 {$\leq^S_\perp$} 构成一个偏序集。对于任意 {$a, b \in S \cup \\{\perp\\}$}，当且仅当 {$a = b$} 或 {$a = \perp$} 时，{$a \leq^S_\perp b$}。在指称语义中，像这样用 {$\perp$} 扩充集合很常见，其中 {$\perp$} 用于表示**未定义值（undefined）**。{$S \cup \\{\perp\\}$} 可简写为 {$S_\perp$}，称作**基本域（primitive domain）**或**平坦域（flat domain）**。
 
 * {$(A \rightharpoondown B, \preceq)$}：从 {$A$} 到 {$B$} 的偏函数（partial function）构成的集合和信息量关系（informativeness relation）{$\preceq$} 构成一个偏序集。对于偏函数 {$f, g : A \rightharpoondown B$}，我们称 {$f$} 的信息量少于或等于 {$g$}，当且仅当对于任意 {$a \in A$}，要么 {$f(a)$} 未定义，要么 {$f(a)$} 和 {$g(a)$} 均有定义且 {$f(a) = g(a)$}。
 
@@ -45,7 +45,7 @@ tags:
 
 * 如果 {$\\{(S_i, \leq_i)\\}\_{i \in I}$} 是一族偏序集，那么 {$\prod_{i \in I}(S_i, \leq_i) = (\prod_{i \in I}S_i, \prod_{i \in I}\leq_i)$} 也是偏序集，其中 {$\prod_{i \in I}\leq_i$} 定义为 {$\\{a_i\\}\_{i \in I} (\prod_{i \in I}\leq_i) \\{b_i\\}_{i \in I}$} 当且仅当对于所有 {$i \in I$}，{$a_i \leq_i b_i$}。
 
-对于预序集 {$(D, \prec)$}，可以定义等价关系 {$\sim$} 为对于任意 {$a, b \in D$}，{$a \sim b$} 当且仅当 {$a \prec b$} 且 {$a \prec b$}。利用这个等价关系，我们能在 {$D$} 对于 {$\sim$} 的商集 {$D / \sim$}，也就是 {$\sim$} 的所有等价类的集合，之上构造偏序 {$\prec^\star$}，定义为对于任意 {$a, b \in D$}，{$[a]\_\sim \prec^\star [b]\_\sim$} 当且仅当 {$a \prec b$}。
+对于预序集 {$(D, \prec)$}，可以定义等价关系 {$\sim$} 为对于任意 {$a, b \in D$}，{$a \sim b$} 当且仅当 {$a \prec b$} 且 {$b \prec a$}。利用这个等价关系，我们能在 {$D$} 对于 {$\sim$} 的商集 {$D / \sim$}，也就是 {$\sim$} 的所有等价类的集合，之上构造偏序 {$\prec^\star$}，定义为对于任意 {$a, b \in D$}，{$[a]\_\sim \prec^\star [b]\_\sim$} 当且仅当 {$a \prec b$}。
 
 有时候，偏序集可以用**哈斯图（Hasse diagram）**来图形化描述。在哈斯图中，偏序集的每个元素都被绘制为一个（可能带标签的）点，点之间的连接线的绘制遵循以下规则：
 
