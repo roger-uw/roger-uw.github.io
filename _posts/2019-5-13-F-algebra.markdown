@@ -25,7 +25,7 @@ tags:
 * **传递性**：对于任意 {$x, y , z \in D$}，若 {$x \sqsubseteq y$} 且 {$y \sqsubseteq z$}，则 {$x \sqsubseteq z$}
 * **反对称性**：对于任意 {$x, y \in D$}，如 {$x \sqsubseteq y$} 且 {$y \sqsubseteq x$}，则 {$x = y$}
 
-一个偏序集 {$(D, \sqsubseteq)$} 如果还满足**完全性**，即对于任意 {$x, y \in D$}，{$x \sqsubseteq y$} 或 {$y \sqsubseteq x$}，那么它就被称为一个**全序集（total order set）**。
+一个偏序集 {$(D, \sqsubseteq)$} 如果还满足**完全性**，即对于任意 {$x, y \in D$}，{$x \sqsubseteq y$} 或 {$y \sqsubseteq x$}，那么它就被称为一个**全序集（total order set）**。如果集合 {$D$} 上的关系 {$\prec$} 只满足自反性和传递性，那么 {$(D, \prec)$} 就被称为一个**预序集（preorder set）**。
 
 例子：
 
@@ -33,7 +33,7 @@ tags:
 
 * {$(Nat \cup \\{\infty\\}, \leq)$}：加入无穷大的自然数集和“小于或等于”构成一个全序集。
 
-* {$(S, =)$}：平坦集合 {$S$} 和恒等关系（identity）构成一个偏序集。
+* {$(S, =)$}：平坦集合 {$S$} 和恒等关系（identity）构成一个偏序集。任何两个不同的元素在这个偏序集中都不可比较。像这样序关系只包含了自反序对 {$(x, x)$} 的偏序被称作**离散偏序（discrete partial order）**。
 
 * {$(S \cup \\{\perp\\}, \leq^S_\perp)$}：扩充了一个底（bottom）元素的集合 {$S$} 和二元关系 {$\leq^S_\perp$} 构成一个偏序集。对于任意 {$a, b \in S \cup \\{\perp\\}$}，当且仅当 {$a = b$} 或 {$a = \perp$} 时，{$a \leq^S_\perp b$}。在指称语义中，像这样用 {$\perp$} 扩充集合很常见，其中 {$\perp$} 用于表示**未定义值（undefined）**。{$S \cup \\{\perp\\}$} 可简写为 {$S_\perp$}，称作**基本域（primitive domain）**或**平坦域（flat domain）**。
 
@@ -45,17 +45,23 @@ tags:
 
 * 如果 {$\\{(S_i, \leq_i)\\}\_{i \in I}$} 是一族偏序集，那么 {$\prod_{i \in I}(S_i, \leq_i) = (\prod_{i \in I}S_i, \prod_{i \in I}\leq_i)$} 也是偏序集，其中 {$\prod_{i \in I}\leq_i$} 定义为 {$\\{a_i\\}\_{i \in I} (\prod_{i \in I}\leq_i) \\{b_i\\}_{i \in I}$} 当且仅当对于所有 {$i \in I$}，{$a_i \leq_i b_i$}。
 
+对于预序集 {$(D, \prec)$}，可以定义等价关系 {$\sim$} 为对于任意 {$a, b \in D$}，{$a \sim b$} 当且仅当 {$a \prec b$} 且 {$a \prec b$}。利用这个等价关系，我们能在 {$D$} 对于 {$\sim$} 的商集 {$D / \sim$}，也就是 {$\sim$} 的所有等价类的集合，之上构造偏序 {$\prec^\star$}，定义为对于任意 {$a, b \in D$}，{[a]\_\sim \prec^\star [b]\_\sim} 当且仅当 {$a \prec b$}。
+
 有时候，偏序集可以用**哈斯图（Hasse diagram）**来图形化描述。在哈斯图中，偏序集的每个元素都被绘制为一个（可能带标签的）点，点之间的连接线的绘制遵循以下规则：
 
 * 若 {$x$} 和 {$y$} 是偏序集的元素且 {$x \sqsubseteq y$}，那么对应 {$x$} 的点画在对应 {$y$} 的点下方。
 
 * 当且仅当 {$x \sqsubseteq y$} 且在偏序集中不存在一个元素 {$z$} 严格处于 {$x$} 和 {$y$} 之间，也就是 {$x$} 和 {$y$} 之间的序关系不是由于传递性时，才能在代表 {$x$} 和 {$y$} 的点之间连线。
 
-对于偏序集 {$(D, \sqsubseteq)$} 和 {$X \subseteq D$}，元素 {$p \in D$} 被称作 {$X$} 的**上界（upper bound）**，当且仅当对于任意 {$x \in X$}，{$x \sqsubseteq p$}。以及，当且仅当 {$p$} 是一个上界，且对于 {$X$} 的其它任意上界 {$q$}，都有 {$p \sqsubseteq q$} 时，{$p$} 被称为**最小上界（least upper bound, LUB）**或上确界，写作 {$\sqcup X$}。
+对于偏序集 {$(D, \sqsubseteq)$} 和 {$X \subseteq D$}，元素 {$p \in D$} 被称作 {$X$} 的**上界（upper bound）**，当且仅当对于任意 {$x \in X$}，{$x \sqsubseteq p$}。以及，当且仅当 {$p$} 是一个上界，且对于 {$X$} 的其它任意上界 {$q$}，都有 {$p \sqsubseteq q$} 时，{$p$} 被称为**最小上界（least upper bound, LUB）**或**上确界（supremum）**或**并（join）**，写作 {$\sqcup X$}。
 
 上界和最小上界并不一定总是存在。比如，若 {$D = X = \\{x,y\\}$} 且 {$\sqsubseteq$} 是恒等关系，那么 {$X$} 没有上界。即使上界存在，最小上界也不一定存在。比如，若 {$D = \\{a, b, c, d, e\\}$}，{$\sqsubseteq$} 定义为 {$a \sqsubseteq c$}，{$a \sqsubseteq d$}，{$b \sqsubseteq c$}，{$b \sqsubseteq d$}，{$c \sqsubseteq e$}，{$d \sqsubseteq e$}（如下图），那么 {$D$} 的任意子集都存在上界，但集合 {$\\{a, b\\}$} 没有最小上界（因为 {$c$}，{$d$} 和 {$e$} 均为 {$\\{a, b\\}$} 的上界，且 {$c \sqsubseteq e$}, {$d \sqsubseteq e$}，但是 {$c$} 和 {$d$} 之间不存在序关系）。最后，由于反对称性，最小上界存在即唯一。
 
 ![HasseDiagram]({{ "/assets/F-algebra/Hasse.svg" | absolute_url }})
+
+我们可以用相似的手段对偶地定义**最大下界（greatest lower bound, GLB）**或**下确界（infimum）**或**交（meet）**。
+
+对于偏序集 {$(D, \sqsubseteq)$}，如果其中任意一对元素构成的子集都存在最小上界，那么 {$(D, \sqsubseteq)$} 被称为一个**并半格（join-semilattice）**。我们可以对偶地定义 **交半格（join-semilattice）**。如果 {$(D, \sqsubseteq)$} 同时是并半格和交半格，我们称其为**格（lattice）**。如果一个格的所有子集都存在最小上界和最小下界，我们称其为**完全格（complete lattice）**。
 
 ### 完全偏序
 
@@ -66,6 +72,8 @@ tags:
 如果 {$\\{d_n \| n \in Nat\\}$} 是 {$(D, \sqsubseteq)$} 中的一条链且有最小上界，我们将其最小上界写作 {$\bigsqcup_{n \in Nat} d_n$} 或者简写为 {$\sqcup d_n$}。
 
 当且仅当偏序集 {$(D, \sqsubseteq)$} 中的任意链都有最小上界时，{$(D, \sqsubseteq)$} 被称作一个**完全偏序（complete partial order, CPO）**。
+
+严格地说，此处的完全偏序采用了**链完全偏序（chain-complete partial order)**的定义。
 
 当且仅当 {$(D, \sqsubseteq)$} 包含一个最小元素时，它被称作**含底的（with bottom, bottomed）**。这个最小元素一般写作 {$\perp$}，含底偏序集则写作 {$(D, \sqsubseteq, \perp)$}。
 
@@ -100,5 +108,7 @@ tags:
 单调函数**保持**链，也就是说，只要 {$\\{d_n \| n \in Nat\\}$} 是 {$(D, \sqsubseteq)$} 中的链，{$\\{\mathcal{F}(d_n) \| n \in Nat\\}$} 就一定是 {$(D', \sqsubseteq')$} 中的链。
 
 如果 {$(D, \sqsubseteq)$} 和 {$(D', \sqsubseteq')$} 均为完全偏序，对于 {$(D, \sqsubseteq)$} 中的任何链 {$\\{d_n \| n \in Nat\\}$} 都有 {$\sqcup \mathcal{F}(d_n) \sqsubseteq' \mathcal{F}(\sqcup d_n)$}。论证如下：根据最小上界的性质，对于任何 {$n \in Nat$}，{$d_n \sqsubseteq \sqcup d_n$}，又因为 {$\mathcal{F}$} 是单调的，所以对于任何 {$n \in Nat$}，都有 {$\mathcal{F}(d_n) \sqsubseteq' \mathcal{F}(\sqcup d_n)$}，或者说，{$\mathcal{F}(\sqcup d_n)$} 是 {$\\{\mathcal{F}(d_n) \| n \in Nat\\}$} 的一个上界。接着，因为 {$\sqcup \mathcal{F}(d_n)$} 是 {$\\{\mathcal{F}(d_n) \| n \in Nat\\}$} 的最小上界，所以 {$\sqcup \mathcal{F}(d_n) \sqsubseteq' \mathcal{F}(\sqcup d_n)$}。
+
+但是，{$\mathcal{F}(\sqcup d_n) \sqsubseteq' \sqcup \mathcal{F}(d_n)$} 却并不一定成立。
 
 ### 不动点理论
