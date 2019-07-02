@@ -25,7 +25,7 @@ tags:
 * **传递性（transitivity）**：对于任意 {$x, y , z \in D$}，若 {$x \sqsubseteq y$} 且 {$y \sqsubseteq z$}，则 {$x \sqsubseteq z$}
 * **反对称性（antisymmetry）**：对于任意 {$x, y \in D$}，若 {$x \sqsubseteq y$} 且 {$y \sqsubseteq x$}，则 {$x = y$}
 
-一个偏序集 {$(D, \sqsubseteq)$} 如果还满足**完全性**，即对于任意 {$x, y \in D$}，{$x \sqsubseteq y$} 或 {$y \sqsubseteq x$}，那么它就被称为一个**全序集（total order set）**。如果集合 {$D$} 上的关系 {$\prec$} 只满足自反性和传递性，那么 {$(D, \prec)$} 就被称为一个**预序集（preorder set）**。如果集合 {$D$} 上的关系 {$\sim$} 除了满足自反性和传递性，还满足**对称性（symmetry）**，即对于任意 {$x, y \in D$}，若 {$x \sim y$}，则 {$y \sim x$}，那么 {$\sim$} 就被称作一个**等价关系（equivalence relation）**，{$(D, \sim)$} 则被称为一个**Setoid**；对于任意 {$x \in D$}，{$x$} 的**等价类（equivalence class）**定义为 {$\\{a \in D | a \sim x\\}$}，记作 {$[x]\_\sim$}。
+一个偏序集 {$(D, \sqsubseteq)$} 如果还满足**完全性**，即对于任意 {$x, y \in D$}，{$x \sqsubseteq y$} 或 {$y \sqsubseteq x$}，那么它就被称为一个**全序集（total order set）**。如果集合 {$D$} 上的关系 {$\prec$} 只满足自反性和传递性，那么 {$(D, \prec)$} 就被称为一个**预序集（preorder set）**。如果集合 {$D$} 上的关系 {$\sim$} 除了满足自反性和传递性，还满足**对称性（symmetry）**，即对于任意 {$x, y \in D$}，若 {$x \sim y$}，则 {$y \sim x$}，那么 {$\sim$} 就被称作一个**等价关系（equivalence relation）**，{$(D, \sim)$} 则被称为一个**Setoid**；对于任意 {$x \in D$}，{$x$} 的**等价类（equivalence class）**定义为 {$\\{a \in D \| a \sim x\\}$}，记作 {$[x]\_\sim$}。
 
 例子：
 
