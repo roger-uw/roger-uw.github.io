@@ -21,11 +21,11 @@ tags:
 
 一个**偏序集（partial order set）** {$(D, \sqsubseteq)$} 由集合 {$D$} 和一个在 {$D$} 上定义的二元关系 {$\sqsubseteq$} 组成，满足：
 
-* **自反性**：对于任意 {$x \in D$}，{$x \sqsubseteq x$}
-* **传递性**：对于任意 {$x, y , z \in D$}，若 {$x \sqsubseteq y$} 且 {$y \sqsubseteq z$}，则 {$x \sqsubseteq z$}
-* **反对称性**：对于任意 {$x, y \in D$}，如 {$x \sqsubseteq y$} 且 {$y \sqsubseteq x$}，则 {$x = y$}
+* **自反性（reflexivity）**：对于任意 {$x \in D$}，{$x \sqsubseteq x$}
+* **传递性（transitivity）**：对于任意 {$x, y , z \in D$}，若 {$x \sqsubseteq y$} 且 {$y \sqsubseteq z$}，则 {$x \sqsubseteq z$}
+* **反对称性（antisymmetry）**：对于任意 {$x, y \in D$}，若 {$x \sqsubseteq y$} 且 {$y \sqsubseteq x$}，则 {$x = y$}
 
-一个偏序集 {$(D, \sqsubseteq)$} 如果还满足**完全性**，即对于任意 {$x, y \in D$}，{$x \sqsubseteq y$} 或 {$y \sqsubseteq x$}，那么它就被称为一个**全序集（total order set）**。如果集合 {$D$} 上的关系 {$\prec$} 只满足自反性和传递性，那么 {$(D, \prec)$} 就被称为一个**预序集（preorder set）**。
+一个偏序集 {$(D, \sqsubseteq)$} 如果还满足**完全性**，即对于任意 {$x, y \in D$}，{$x \sqsubseteq y$} 或 {$y \sqsubseteq x$}，那么它就被称为一个**全序集（total order set）**。如果集合 {$D$} 上的关系 {$\prec$} 只满足自反性和传递性，那么 {$(D, \prec)$} 就被称为一个**预序集（preorder set）**。如果集合 {$D$} 上的关系 {$\sim$} 除了满足自反性和传递性，还满足**对称性（symmetry）**，即对于任意 {$x, y \in D$}，若 {$x \sim y$}，则 {$y \sim x$}，那么 {$\sim$} 就被称作一个**等价关系（equivalence relation）**，{$(D, \sim)$} 则被称为一个**Setoid**；对于任意 {$x \in D$}，{$x$} 的**等价类（equivalence class）**定义为 {$\\{a \in D | a \sim x\\}$}，记作 {$[x]\_\sim$}。
 
 例子：
 
@@ -45,7 +45,7 @@ tags:
 
 * 如果 {$\\{(S_i, \leq_i)\\}\_{i \in I}$} 是一族偏序集，那么 {$\prod_{i \in I}(S_i, \leq_i) = (\prod_{i \in I}S_i, \prod_{i \in I}\leq_i)$} 也是偏序集，其中 {$\prod_{i \in I}\leq_i$} 定义为 {$\\{a_i\\}\_{i \in I} (\prod_{i \in I}\leq_i) \\{b_i\\}_{i \in I}$} 当且仅当对于所有 {$i \in I$}，{$a_i \leq_i b_i$}。
 
-对于预序集 {$(D, \prec)$}，可以定义等价关系 {$\sim$} 为对于任意 {$a, b \in D$}，{$a \sim b$} 当且仅当 {$a \prec b$} 且 {$b \prec a$}。利用这个等价关系，我们能在 {$D$} 对于 {$\sim$} 的商集 {$D / \sim$}，也就是 {$\sim$} 的所有等价类的集合，之上构造偏序 {$\prec^\star$}，定义为对于任意 {$a, b \in D$}，{$[a]\_\sim \prec^\star [b]\_\sim$} 当且仅当 {$a \prec b$}。
+对于预序集 {$(D, \prec)$}，可以定义等价关系 {$\sim$} 为对于任意 {$a, b \in D$}，{$a \sim b$} 当且仅当 {$a \prec b$} 且 {$b \prec a$}。利用这个等价关系，我们能在 {$D$} 关于 {$\sim$} 的**商集（quotient set）** {$D / \sim$}，也就是关于 {$\sim$} 的所有等价类的集合，之上构造偏序 {$\prec^\star$}，定义为对于任意 {$a, b \in D$}，{$[a]\_\sim \prec^\star [b]\_\sim$} 当且仅当 {$a \prec b$}。
 
 有时候，偏序集可以用**哈斯图（Hasse diagram）**来图形化描述。在哈斯图中，偏序集的每个元素都被绘制为一个（可能带标签的）点，点之间的连接线的绘制遵循以下规则：
 
