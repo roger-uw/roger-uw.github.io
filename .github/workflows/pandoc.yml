@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-      - uses: docker://pandoc/core:2.16
+      - uses: docker://pandoc/latex:2.16
         with:
           args: "/github/workspace/_posts/CV.markdown -s -o CV.pdf"
       - uses: actions/upload-artifact@v2
