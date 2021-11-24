@@ -1,0 +1,14 @@
+name: Pandoc
+
+on:
+  push:
+    paths:
+      - '_posts/CV.markdown'
+
+jobs:
+  convert_via_pandoc:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: docker://pandoc/latex:2.9
+        with:
+          args: "./_posts/CV.markdown -s -o CV.pdf"
