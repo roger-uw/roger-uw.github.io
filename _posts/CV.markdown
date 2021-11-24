@@ -51,7 +51,7 @@ Programming Languages, Type Systems, Functional Programming, Row Polymorphism
   - UoG Degree Classification: Upper Second Class Honours (2:1)
 
 ## Programming Languages
-(Codewars: 1 kyu)
+![Codewars](https://www.codewars.com/users/Arisaematis/badges/micro)
 
 Haskell, JavaScript, Scala, Java, Coq, Agda, C, C++, Python, MATLAB
 
