@@ -1,13 +1,3 @@
----
-layout: post
-title:  "CV"
-date:   2021-11-23 00:00:00 +0000
-categories:
-  - post
-tags:
-  - CV
----
-
 # Rongxiao Fu
 
 ## Research Interests
