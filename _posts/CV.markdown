@@ -51,7 +51,7 @@ Programming Languages, Type Systems, Functional Programming, Row Polymorphism
   - UoG Degree Classification: Upper Second Class Honours (2:1)
 
 ## Programming Languages
-![codewars](https://www.codewars.com/users/Arisaematis/badges/micro)
+[codewars](https://www.codewars.com/users/Arisaematis/badges/micro)
 
 Haskell, JavaScript, Scala, Java, Coq, Agda, C, C++, Python, MATLAB
 
@@ -62,5 +62,3 @@ Haskell, JavaScript, Scala, Java, Coq, Agda, C, C++, Python, MATLAB
 - Teaching Assistant at the Glasgow College, UESTC (2016~2017)
   - Worked as a teaching assistant for the course Introductory Programming (2016~2017).
   - Worked as a teaching assistant for the course Microelectronic Systems (2017).
-
-change
