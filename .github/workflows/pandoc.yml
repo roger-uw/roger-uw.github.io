@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: docker://pandoc/latex:2.16
         with:
-          args: "/github/workspace/_posts/CV.markdown -s -o CV.pdf"
+          args: "/github/workspace/_posts/CV.markdown -o CV.pdf"
       - uses: actions/upload-artifact@v2
         with:
           name: CV
