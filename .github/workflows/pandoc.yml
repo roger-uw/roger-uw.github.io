@@ -11,4 +11,4 @@ jobs:
     steps:
       - uses: docker://pandoc/latex:2.9
         with:
-          args: "./_posts/CV.markdown -s -o CV.pdf"
+          args: "/github/workspace/_posts/CV.markdown -s -o CV.pdf"
