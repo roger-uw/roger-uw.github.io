@@ -62,3 +62,5 @@ Haskell, JavaScript, Scala, Java, Coq, Agda, C, C++, Python, MATLAB
 - Teaching Assistant at the Glasgow College, UESTC (2016~2017)
   - Worked as a teaching assistant for the course Introductory Programming (2016~2017).
   - Worked as a teaching assistant for the course Microelectronic Systems (2017).
+
+change
