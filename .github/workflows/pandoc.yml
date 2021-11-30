@@ -3,7 +3,7 @@ name: Pandoc
 on:
   push:
     paths:
-      - '_posts/CV.markdown'
+      - '_posts/2021-11-30-CV.markdown'
 
 jobs:
   convert_via_pandoc:
@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: docker://pandoc/latex:2.16
         with:
-          args: "/github/workspace/_posts/CV.markdown -o CV.pdf"
+          args: "/github/workspace/_posts/2021-11-30-CV.markdown -o CV.pdf"
       - uses: actions/upload-artifact@v2
         with:
           name: CV
