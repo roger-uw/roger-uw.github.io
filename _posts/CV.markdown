@@ -4,6 +4,8 @@ title:  "CV"
 date:   2021-11-30 00:00:00 +0000
 categories:
   - post
+tags:
+  - CV
 ---
 
 # Rongxiao Fu
