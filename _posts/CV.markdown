@@ -1,4 +1,13 @@
+---
+layout: post
+title:  "CV"
+date:   2021-11-30 00:00:00 +0000
+categories:
+  - post
+---
+
 # Rongxiao Fu
+![Photo]({{ "/assets/CV/Rongxiao_Fu.jpeg" | absolute_url }})
 
 ## Research Interests
 Programming Languages, Type Systems, Functional Programming, Row Polymorphism
@@ -9,7 +18,7 @@ Programming Languages, Type Systems, Functional Programming, Row Polymorphism
   - Designed a row polymorphic type system with traces helping reject unproductive compositions of strategies, proved the soundness of the type system, and showed that unproductive strategies always evaluate to failures at run-time.
   - Implemented in Haskell.
 
-- RISE (2019 ~ 2020) - GitHub Repo.
+- RISE (2019 ~ 2020) - [GitHub Repo.](https://github.com/rise-lang/shine)
   - A functional language with dependent datatype for describing data-parallel computations.
   - Improved the type inference algorithm for RISE, avoiding repeated type inference during rewriting while ensuring the rewrite rules are type-preserving.
   - Implemented in Scala.
@@ -41,7 +50,7 @@ Programming Languages, Type Systems, Functional Programming, Row Polymorphism
   - UoG Degree Classification: Upper Second Class Honours (2:1)
 
 ## Programming Languages
-![codewars](https://www.codewars.com/users/Arisaematis/badges/micro)
+[codewars 1 kyu](https://www.codewars.com/users/Arisaematis)
 
 Haskell, JavaScript, Scala, Java, Coq, Agda, C, C++, Python, MATLAB
 
